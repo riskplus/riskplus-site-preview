@@ -285,6 +285,7 @@
     .marquee .track { display: flex; gap: 48px; width: max-content; animation: slide 46s linear infinite; }
     .marquee span { font-size: 21px; font-weight: 600; letter-spacing: -.02em; color: var(--faint); white-space: nowrap; }
     @keyframes slide { to { transform: translateX(-50%); } }
+    .marquee:hover .track { animation-play-state: paused; }
 
     /* Scroll-lit statements */
     .lit-head { margin-bottom: 80px; }
@@ -649,7 +650,8 @@
       *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
       html { scroll-behavior: auto; }
       [data-reveal], .load, .res, .trait { opacity: 1 !important; transform: none !important; }
-      .marquee .track { animation: none; }
+      /* A faixa de fontes continua correndo, mais devagar, mesmo com movimento reduzido no sistema. */
+      .marquee .track { animation: slide 80s linear infinite !important; }
     }
   </style>
 </head>
