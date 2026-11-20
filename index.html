@@ -3,22 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>RiskPlus · Decisão de crédito B2B em segundos</title>
+  <title>RiskPlus · Apoio à decisão de crédito para vender a prazo</title>
   <meta name="description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B e a RiskPlus responde, mesmo quando a empresa não tem histórico no bureau." />
-  <meta property="og:title" content="RiskPlus · Decisão de crédito B2B em segundos" />
+  <link rel="canonical" href="https://riskplus.com.br/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="RiskPlus" />
+  <meta property="og:url" content="https://riskplus.com.br/" />
+  <meta property="og:title" content="RiskPlus · Apoio à decisão de crédito para vender a prazo" />
   <meta property="og:description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B." />
+  <meta property="og:image" content="https://riskplus.com.br/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="RiskPlus: saiba em segundos se vale vender a prazo." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="RiskPlus · Apoio à decisão de crédito para vender a prazo" />
+  <meta name="twitter:description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B." />
+  <meta name="twitter:image" content="https://riskplus.com.br/assets/og.png" />
   <meta name="color-scheme" content="light dark" />
   <link rel="icon" href="assets/icon-blue.svg" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&family=Outfit:wght@600;800&family=Open+Sans:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css" />
 
-  <script src="vendor/react.js"></script>
-  <script src="vendor/react-dom.js"></script>
-  <script src="vendor/babel.js"></script>
 
   <style>
     /* ============================================================
@@ -96,6 +105,7 @@
       --nav-h: 76px;
     }
     /* Dark scheme built from the DS neutrals (the guide defines light only) */
+    .logo-dark { display: none !important; }
     @media (prefers-color-scheme: dark) {
       :root {
         --page:  var(--rp-ink);
@@ -119,7 +129,6 @@
       .logo-light { display: none !important; }
       .logo-dark { display: block !important; }
     }
-    .logo-dark { display: none !important; }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -239,6 +248,9 @@
     .skel .row.done i { color: var(--go); }
     .skel .row.active i { color: var(--accent); animation: spin .9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    /* Ícones SVG inline: o tamanho vem do font-size do <i>, a cor do color. */
+    i.ic { display: inline-flex; width: 1em; height: 1em; line-height: 1; font-style: normal; flex: none; vertical-align: -0.125em; }
+    i.ic svg { width: 100%; height: 100%; display: block; }
     .skel .bar { height: 14px; border-radius: 7px; background: linear-gradient(90deg, var(--tile) 0%, var(--hair) 50%, var(--tile) 100%); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
     .skel .bar.w1 { width: 72%; } .skel .bar.w2 { width: 48%; } .skel .bar.w3 { width: 86%; margin-top: 18px; }
     @keyframes shimmer { to { background-position: -200% 0; } }
@@ -251,9 +263,9 @@
     .res-cnpj { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 2px; }
     .res-score { display: none; font-size: 56px; line-height: .8; letter-spacing: -.03em; }
     .tone-go { color: var(--go); } .tone-caution { color: var(--caution); } .tone-stop { color: var(--stop); }
-    .res-head-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 18px 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); }
+    .res-head-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin: 18px 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--hair); }
     .res-k { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
-    .res-decision { font-family: var(--font-display); font-size: 40px; line-height: 1; letter-spacing: -.02em; }
+    .res-decision { font-family: var(--font-display); font-size: clamp(30px, 8vw, 40px); line-height: 1; letter-spacing: -.02em; }
     .res-arch { font-size: 24px; letter-spacing: -.025em; margin-top: 18px; }
     .res-lbl { font-size: 14px; font-weight: 500; margin-top: 2px; }
     .traits { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0; }
@@ -386,6 +398,11 @@
     .field input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
     .field.err input { border-color: var(--stop); }
     .field .msg { font-size: 13px; color: var(--stop); }
+    .form .consent { font-size: 13px; color: var(--muted); margin: 4px 0 14px; }
+    .form .consent a, .faq-note a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    .demo-only { min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 18px; padding: 24px; border-radius: var(--radius-sm); background: var(--tile); }
+    .demo-only p { margin: 0; font-size: 17px; font-weight: 500; color: var(--ink); }
+    .res-ex { margin-left: auto; align-self: flex-start; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--tile); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
     .form .pill { width: 100%; margin-top: 8px; padding: 14px; }
     .form .fine { font-size: 13px; color: var(--muted); text-align: center; margin-top: 14px; }
     .done { text-align: center; padding: 48px 8px; animation: load-in .6s var(--ease); }
@@ -446,6 +463,16 @@
       .demo-head .ok { display: none; }
       .demo-row { flex-direction: column; }
       .demo-row button { height: 44px; justify-content: center; }
+      .gal { align-items: start; }
+      .gcard { min-height: 0; }
+      .gvis { margin-top: 24px; padding-top: 0; }
+    }
+    @media (max-width: 833px) {
+      .foot .cols a, .foot .legal a { display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
+      .foot .cols a { display: flex; }
+      .more { min-height: 44px; }
+      .faq-note a { display: inline-block; padding: 12px 0; margin: -12px 0; }
+      .demo-ex button { min-height: 44px; padding: 0 14px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -460,576 +487,6 @@
   <a href="#main" class="skip">Pular para o conteúdo</a>
   <div id="root"></div>
 
-  <script type="text/babel">
-    // ── Data ──────────────────────────────────────────────────────────────────
-    const SAMPLES = {
-      "12.345.678/0001-90": {
-        name: "Mercatto Distribuição Ltda", setor: "Atacado · Alimentos", fundacao: "2014",
-        initials: "MD", decision: "Liberar", band: "go",
-        traits: [
-          { kind: "good", text: "Pagamentos em dia", icon: "check-circle" },
-          { kind: "good", text: "Faturamento estável", icon: "trend-up" },
-          { kind: "good", text: "Sócios sem restrições", icon: "shield-check" },
-          { kind: "good", text: "10 anos de Receita ativa", icon: "calendar-blank" },
-        ]
-      },
-      "33.222.111/0001-44": {
-        name: "Vega Indústria & Comércio", setor: "Indústria · Têxtil", fundacao: "2019",
-        initials: "VI", decision: "Atenção", band: "caution",
-        traits: [
-          { kind: "good", text: "Cadastro regular na Receita", icon: "check-circle" },
-          { kind: "neutral", text: "Atrasos recentes em pagamentos", icon: "clock" },
-          { kind: "neutral", text: "Faturamento oscilando", icon: "trend-down" },
-          { kind: "good", text: "5 anos de Receita ativa", icon: "calendar-blank" },
-        ]
-      },
-      "55.999.444/0001-12": {
-        name: "Northbay Trading ME", setor: "Importação", fundacao: "2023",
-        initials: "NT", decision: "Negar", band: "stop",
-        traits: [
-          { kind: "bad", text: "Empresa recém-aberta", icon: "warning-circle" },
-          { kind: "bad", text: "Sócio com restrições em outros CNPJs", icon: "user-minus" },
-          { kind: "bad", text: "Cadastro inconsistente na Receita", icon: "x-circle" },
-        ]
-      }
-    };
-    const FALLBACK = {
-      name: "Empresa consultada", setor: "Não informado", fundacao: "Não informado", initials: "EC",
-      decision: "Liberar", band: "go",
-      traits: [
-        { kind: "good", text: "Cadastro regular na Receita", icon: "check-circle" },
-        { kind: "good", text: "Sócios sem restrições", icon: "shield-check" },
-      ]
-    };
-    const ANALYSIS_STEPS = ["Consultando a Receita Federal", "Cruzando o quadro societário", "Lendo faturamento, pagamentos e sinais alternativos", "Aplicando o modelo RiskPlus"];
-    const STEP_MS = 520;
-
-    const SOURCES = ["Receita Federal", "Quadro societário", "Comportamento de faturamento", "Comportamento de pagamentos", "Sinais alternativos", "Modelo RiskPlus"];
-
-    const STATEMENTS = [
-      { us: <><b>Liberar, Atenção ou Negar.</b> Com os motivos ao lado.</>, them: "No bureau: score sem explicação." },
-      { us: <>Analisa empresas <b>fora do bureau</b> usando sinais alternativos.</>, them: "No bureau: empresa nova ou pequena costuma aparecer como “sem informação”." },
-      { us: <>Cola o CNPJ e <b>tem a resposta em segundos.</b></>, them: "No bureau: relatório longo pra interpretar." },
-      { us: <><b>No painel ou via API</b>, do jeito que funcionar melhor pra você.</>, them: "No bureau: planilha ou integração antiga." },
-    ];
-
-    const FAQS = [
-      { q: "Como a RiskPlus analisa empresas que não aparecem no bureau?",
-        a: "A gente cruza os dados da Receita Federal e do quadro societário com o comportamento de faturamento e pagamentos e com sinais alternativos de fontes contratadas. Tudo passa pelo nosso modelo. Por isso MEI, empresa nova e pequeno negócio também recebem uma resposta." },
-      { q: "De onde vêm os dados? Está de acordo com a LGPD?",
-        a: "Usamos dados públicos, como Receita Federal e quadro societário, e dados de fontes contratadas. A RiskPlus é registrada como bureau, segue a LGPD e mantém base de exclusão para quem pedir." },
-      { q: "Dá pra analisar vários CNPJs de uma vez ou integrar com meu sistema?",
-        a: "Dá. No dia a dia, você cola o CNPJ no painel. Se tiver uma lista, manda pra gente que devolvemos a análise de todos em CSV. Também dá pra integrar via API." },
-    ];
-
-    // ── Helpers ───────────────────────────────────────────────────────────────
-    const formatCnpj = (v) => {
-      const d = v.replace(/\D/g, "").slice(0, 14);
-      return d
-        .replace(/^(\d{2})(\d)/, "$1.$2")
-        .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-        .replace(/\.(\d{3})(\d)/, ".$1/$2")
-        .replace(/(\d{4})(\d)/, "$1-$2");
-    };
-    const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const Icon = ({ n, b }) => <i className={`${b ? "ph-bold" : "ph"} ph-${n}`} aria-hidden="true"></i>;
-    const Logo = () => (
-      <>
-        <img className="logo-light" src="assets/logo-blue.svg" alt="RiskPlus" />
-        <img className="logo-dark" src="assets/logo-white.svg" alt="RiskPlus" />
-      </>
-    );
-
-    // Fades [data-reveal] elements in once they enter the viewport.
-    const useReveal = () => {
-      React.useEffect(() => {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => { if (e.isIntersecting) { e.target.dataset.shown = ""; io.unobserve(e.target); } });
-        }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-        document.querySelectorAll("[data-reveal]").forEach((el) => io.observe(el));
-        return () => io.disconnect();
-      }, []);
-    };
-
-    // ── Nav ───────────────────────────────────────────────────────────────────
-    const NAV = [
-      { href: "#diferenciais", label: "Diferenciais" },
-      { href: "#como-funciona", label: "Como funciona" },
-      { href: "#produto", label: "Produto" },
-      { href: "#faq", label: "FAQ" },
-    ];
-
-    const Nav = () => {
-      const [open, setOpen] = React.useState(false);
-      const [active, setActive] = React.useState("");
-
-      React.useEffect(() => {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => { if (e.isIntersecting) setActive("#" + e.target.id); });
-        }, { rootMargin: "-45% 0px -50% 0px" });
-        ["#hero", ...NAV.map((l) => l.href)].forEach((h) => { const el = document.querySelector(h); if (el) io.observe(el); });
-        return () => io.disconnect();
-      }, []);
-
-      React.useEffect(() => {
-        document.body.style.overflow = open ? "hidden" : "";
-        const onKey = (e) => e.key === "Escape" && setOpen(false);
-        window.addEventListener("keydown", onKey);
-        return () => { document.body.style.overflow = ""; window.removeEventListener("keydown", onKey); };
-      }, [open]);
-
-      return (
-        <>
-          <header className="gnav">
-            <div className="wrap">
-              <a href="#" className="logo" aria-label="RiskPlus, início"><Logo /></a>
-              <nav aria-label="Principal">
-                {NAV.map((l) => <a key={l.href} href={l.href} className={active === l.href ? "active" : ""}>{l.label}</a>)}
-              </nav>
-              <div className="right">
-                <a href="#acesso" className="pill pill-warn pill-sm">Falar com o time</a>
-                <button className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
-              </div>
-            </div>
-          </header>
-          <div className={`mmenu ${open ? "open" : ""}`} role="dialog" aria-modal="true" aria-label="Menu" aria-hidden={!open}>
-            <div className="top"><button className="icon-btn" aria-label="Fechar menu" onClick={() => setOpen(false)}><Icon n="x" /></button></div>
-            <nav>{NAV.map((l, i) => <a key={l.href} href={l.href} style={{ "--i": i }} onClick={() => setOpen(false)}>{l.label}</a>)}</nav>
-            <a href="#acesso" className="pill pill-fill" onClick={() => setOpen(false)}>Falar com o time</a>
-          </div>
-        </>
-      );
-    };
-
-    // ── Hero + live demo ──────────────────────────────────────────────────────
-    const Hero = () => {
-      const first = Object.keys(SAMPLES)[0];
-      const [cnpj, setCnpj] = React.useState(first);
-      const [phase, setPhase] = React.useState("analyzing");
-      const [stepIdx, setStepIdx] = React.useState(0);
-      const [result, setResult] = React.useState(null);
-      const [shown, setShown] = React.useState(first);
-      const timers = React.useRef([]);
-      const clear = () => { timers.current.forEach(clearTimeout); timers.current = []; };
-
-      const analisar = (raw, delay = 0) => {
-        const key = raw ?? cnpj;
-        clear();
-        setPhase("analyzing"); setStepIdx(0);
-        const sample = SAMPLES[key] || FALLBACK;
-        ANALYSIS_STEPS.forEach((_, i) => timers.current.push(setTimeout(() => setStepIdx(i + 1), delay + (i + 1) * STEP_MS)));
-        timers.current.push(setTimeout(() => { setResult(sample); setShown(key); setPhase("result"); }, delay + ANALYSIS_STEPS.length * STEP_MS + 260));
-      };
-      React.useEffect(() => { analisar(first, 1200); return clear; }, []);
-      const busy = phase === "analyzing";
-
-      // Start offsets for the pinned hero: text centered on top, demo centered
-      // below it. The scroll animation carries both back to their grid cells.
-      const heroRef = React.useRef(null), pinRef = React.useRef(null), textRef = React.useRef(null), demoRef = React.useRef(null);
-      React.useEffect(() => {
-        const measure = () => {
-          const pin = pinRef.current, t = textRef.current, d = demoRef.current;
-          const W = pin.clientWidth, top = 48, gap = 56;
-          const vars = {
-            "--tx": `${(W - t.offsetWidth) / 2 - t.offsetLeft}px`,
-            "--ty": `${top - t.offsetTop}px`,
-            "--dx": `${(W - d.offsetWidth) / 2 - d.offsetLeft}px`,
-            "--dy": `${top + t.offsetHeight + gap - d.offsetTop}px`,
-          };
-          Object.entries(vars).forEach(([k, v]) => heroRef.current.style.setProperty(k, v));
-        };
-        measure();
-        const ro = new ResizeObserver(measure);
-        ro.observe(pinRef.current);
-        ro.observe(textRef.current);
-        ro.observe(demoRef.current);
-        return () => ro.disconnect();
-      }, []);
-
-      return (
-        <section className="hero tile" id="hero" ref={heroRef}>
-          <div className="hero-pin" ref={pinRef}>
-          <div className="hero-grid">
-          <div className="hero-text" ref={textRef}>
-            <h1 className="h-xl load" style={{ "--d": "100ms" }}>Saiba <span className="hl">em segundos</span> se vale vender a prazo.</h1>
-            <p className="lead load" style={{ "--d": "260ms" }}>Cole o CNPJ do seu cliente B2B. A RiskPlus responde mesmo quando a empresa não tem histórico no bureau.</p>
-            <div className="actions load" style={{ "--d": "400ms" }}>
-              <a href="#acesso" className="pill pill-fill">Falar com o time</a>
-              <a href="#como-funciona" className="more">Como funciona <Icon n="caret-right" b /></a>
-            </div>
-          </div>
-
-          <div className="hero-demo" ref={demoRef}>
-          <div className="load" style={{ "--d": "560ms" }}>
-            <div>
-              <div className="demo">
-                <div className="demo-head">
-                  <span>Análise de CNPJ</span>
-                  <span className="ok"><Icon n="lock-simple" b />De acordo com a LGPD</span>
-                </div>
-                <div className="demo-row">
-                  <input value={cnpj} placeholder="00.000.000/0000-00" inputMode="numeric" aria-label="CNPJ"
-                    onChange={(e) => setCnpj(formatCnpj(e.target.value))}
-                    onKeyDown={(e) => e.key === "Enter" && !busy && analisar()} />
-                  <button onClick={() => analisar()} disabled={busy || cnpj.replace(/\D/g, "").length < 14}>
-                    {busy ? "Analisando…" : <>Analisar <Icon n="arrow-right" /></>}
-                  </button>
-                </div>
-                <div className="demo-ex" aria-label="CNPJs de exemplo">
-                  {Object.keys(SAMPLES).map((k) => (
-                    <button key={k} aria-pressed={shown === k && !busy} disabled={busy} onClick={() => { setCnpj(k); analisar(k); }}>{k}</button>
-                  ))}
-                </div>
-                <div className="demo-stage" aria-live="polite">
-                  {busy && (
-                    <div className="skel">
-                      {ANALYSIS_STEPS.map((s, i) => {
-                        const st = i < stepIdx ? "done" : i === stepIdx ? "active" : "";
-                        return (
-                          <div key={i} className={`row ${st}`}>
-                            <Icon n={st === "done" ? "check-circle" : st === "active" ? "circle-notch" : "circle"} b={st !== ""} />{s}
-                          </div>
-                        );
-                      })}
-                      <div className="bar w3"></div>
-                      <div className="bar w1"></div>
-                      <div className="bar w2"></div>
-                    </div>
-                  )}
-                  {!busy && result && (
-                    <div className={`res ${result.band}`}>
-                      <div className="res-top">
-                        <div className="res-av">{result.initials}</div>
-                        <div>
-                          <div className="res-co">{result.name}</div>
-                          <div className="res-cnpj">CNPJ {shown}</div>
-                        </div>
-                      </div>
-                      <div className="res-head-row">
-                        <span className="res-k">Recomendação</span>
-                        <span className={`res-decision tone-${result.band}`}>{result.decision}</span>
-                      </div>
-                      <span className="res-k">Motivos</span>
-                      <div className="traits">
-                        {result.traits.map((t, i) => <span key={i} className={`trait ${t.kind}`} style={{ "--i": i }}><Icon n={t.icon} b />{t.text}</span>)}
-                      </div>
-                      <div className="kv">
-                        <div><div className="k">Setor</div><div className="v">{result.setor}</div></div>
-                        <div><div className="k">Fundação</div><div className="v">{result.fundacao}</div></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
-          </div>
-          </div>
-        </section>
-      );
-    };
-
-    const Marquee = () => (
-      <div className="marquee" aria-label="Fontes cruzadas em cada análise">
-        <div className="track" aria-hidden="true">
-          {[...SOURCES, ...SOURCES].map((s, i) => <span key={i}>{s}</span>)}
-        </div>
-      </div>
-    );
-
-    // ── Differentiators: each statement lights up as it crosses the middle ────
-    const Differentiators = () => {
-      const listRef = React.useRef(null);
-      React.useEffect(() => {
-        const items = listRef.current.querySelectorAll(".lit");
-        if (reducedMotion()) { items.forEach((el) => (el.dataset.on = "")); return; }
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) e.target.dataset.on = "";
-            else if (e.boundingClientRect.top > window.innerHeight / 2) delete e.target.dataset.on;
-          });
-        }, { rootMargin: "-38% 0px -38% 0px" });
-        items.forEach((el) => io.observe(el));
-        return () => io.disconnect();
-      }, []);
-
-      return (
-        <section className="sec" id="diferenciais">
-          <div className="wrap center lit-head">
-            <h2 className="h-lg" data-reveal>O bureau só enxerga quem já tem histórico de crédito.</h2>
-            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus cruza dados da Receita Federal e do quadro societário com o comportamento de faturamento e pagamentos e com sinais alternativos. Assim dá pra analisar MEI e empresa recém-aberta.</p>
-          </div>
-          <div className="wrap">
-            <div className="lit-list" ref={listRef}>
-              {STATEMENTS.map((s, i) => (
-                <div className="lit" key={i}>
-                  <h3>{s.us}</h3>
-                  <p>{s.them}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // ── How it works: horizontal gallery ──────────────────────────────────────
-    const HowItWorks = () => {
-      const galRef = React.useRef(null);
-      const [ends, setEnds] = React.useState({ start: true, end: false });
-
-      React.useEffect(() => {
-        const gal = galRef.current;
-        const cards = gal.querySelectorAll(".gcard");
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => {
-            const key = e.target === cards[0] ? "start" : "end";
-            setEnds((s) => ({ ...s, [key]: e.intersectionRatio > 0.95 }));
-          });
-        }, { root: gal, threshold: [0, 0.5, 0.95, 1] });
-        io.observe(cards[0]); io.observe(cards[cards.length - 1]);
-        return () => io.disconnect();
-      }, []);
-
-      const go = (dir) => {
-        const card = galRef.current.querySelector(".gcard");
-        galRef.current.scrollBy({ left: dir * (card.offsetWidth + 20), behavior: reducedMotion() ? "auto" : "smooth" });
-      };
-
-      return (
-        <section className="sec tile" id="como-funciona">
-          <div className="wrap gal-head">
-            <h2 className="h-lg" data-reveal>Do CNPJ à decisão em três passos.</h2>
-            <div className="gal-nav">
-              <button onClick={() => go(-1)} disabled={ends.start} aria-label="Passo anterior"><Icon n="caret-left" b /></button>
-              <button onClick={() => go(1)} disabled={ends.end} aria-label="Próximo passo"><Icon n="caret-right" b /></button>
-            </div>
-          </div>
-          <div className="gal" ref={galRef}>
-            <article className="gcard">
-              <span className="step">Primeiro</span>
-              <h3>Cole o CNPJ.</h3>
-              <p className="gtext">Qualquer empresa brasileira, com ou sem pontos e barra no número.</p>
-              <div className="gvis"><div className="field-mock"><span>12.345.678/0001-90</span><span className="caret"></span></div></div>
-            </article>
-            <article className="gcard blue">
-              <span className="step">Depois</span>
-              <h3>A RiskPlus cruza os dados.</h3>
-              <p className="gtext">Receita Federal, quadro societário, comportamento de faturamento e pagamentos e sinais alternativos passam pelo nosso modelo em segundos.</p>
-              <div className="gvis"><div className="chips">{SOURCES.slice(0, 5).map((s) => <span key={s}>{s}</span>)}</div></div>
-            </article>
-            <article className="gcard">
-              <span className="step">Por fim</span>
-              <h3>Decida com os motivos na mão.</h3>
-              <p className="gtext">Você recebe Liberar, Atenção ou Negar e os fatores que pesaram. Fica fácil explicar pro cliente ou pro sócio por que o prazo saiu ou não.</p>
-              <div className="gvis"><div className="verdicts">
-                <span className="go">Liberar <Icon n="check" b /></span>
-                <span className="caution">Atenção <Icon n="warning" b /></span>
-                <span className="stop">Negar <Icon n="x" b /></span>
-              </div></div>
-            </article>
-          </div>
-        </section>
-      );
-    };
-
-    // ── Product (dark color block) ────────────────────────────────────────────
-    const PRODUCT_FOR = [["check-circle", "Pagamentos em dia"], ["trend-up", "Faturamento estável"], ["shield-check", "Sócios sem restrições"], ["calendar-blank", "10 anos de Receita ativa"]];
-    const PRODUCT_WATCH = [["clock", "1 atraso regularizado"]];
-    const Product = () => (
-      <section className="sec dark" id="produto">
-        <div className="wrap center">
-          <h2 className="h-lg" data-reveal>Uma resposta que você entende de primeira.</h2>
-          <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus diz se vale vender a prazo e mostra o que pesou a favor e o que pesou contra.</p>
-        </div>
-        <div className="wrap">
-          <div className="pcard" data-reveal style={{ "--i": 2 }}>
-            <div className="pcard-top">
-              <div className="av">MD</div>
-              <div>
-                <div className="who">Mercatto Distribuição Ltda, CNPJ 12.345.678/0001-90</div>
-                <div className="arch go">Liberar</div>
-                <p className="desc">Empresa com pagamentos em dia e faturamento estável. Sócios sem restrições e cadastro regular na Receita Federal.</p>
-              </div>
-              <span className="badge">Exemplo de análise</span>
-            </div>
-            <div className="pfactors">
-              <div>
-                <div className="k">A favor</div>
-                <div className="traits">{PRODUCT_FOR.map(([ic, t]) => <span key={t} className="trait good"><Icon n={ic} b />{t}</span>)}</div>
-              </div>
-              <div>
-                <div className="k">Ponto de atenção</div>
-                <div className="traits">{PRODUCT_WATCH.map(([ic, t]) => <span key={t} className="trait neutral"><Icon n={ic} b />{t}</span>)}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── The three decisions: bento ───────────────────────────────────────────
-    const DECISIONS = [
-      { cls: "go big", icon: "check-circle", name: "Liberar", desc: "Pode vender a prazo. Os sinais mostram uma empresa que paga em dia.",
-        traits: ["Pagamentos em dia", "Faturamento estável ou crescente", "Sócios sem restrições", "Cadastro regular na Receita Federal"] },
-      { cls: "caution", icon: "warning", name: "Atenção", desc: "Os sinais estão misturados. Vale olhar os motivos antes de decidir.",
-        traits: ["Atrasos recentes em pagamentos", "Faturamento com oscilações"] },
-      { cls: "stop", icon: "x-circle", name: "Negar", desc: "Os sinais de risco pesam mais. O mais seguro é vender à vista.",
-        traits: ["Sócio com restrições em outros CNPJs", "Cadastro inconsistente na Receita Federal"] },
-    ];
-    const Decisions = () => (
-      <section className="sec">
-        <div className="wrap">
-          <div className="center">
-            <h2 className="h-lg" data-reveal>Três respostas possíveis.</h2>
-            <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>Cada CNPJ sai com uma recomendação clara e os fatores que levaram até ela.</p>
-          </div>
-          <div className="bento">
-            {DECISIONS.map((d, i) => (
-              <article key={d.name} className={`bt ${d.cls}`} data-reveal style={{ "--i": i }}>
-                <span className="letter" aria-hidden="true"><Icon n={d.icon} b /></span>
-                <span className="tag"><Icon n={d.icon} b />Recomendação</span>
-                <h3>{d.name}</h3>
-                <p className="bt-desc">{d.desc}</p>
-                <div className="bt-k">Sinais que costumam levar aqui</div>
-                <ul>{d.traits.map((t) => <li key={t}>{t}</li>)}</ul>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-
-    // ── FAQ ───────────────────────────────────────────────────────────────────
-    const FAQ = () => {
-      const [open, setOpen] = React.useState(-1);
-      return (
-        <section className="sec tile" id="faq">
-          <div className="wrap-narrow">
-            <h2 className="h-lg center" data-reveal>Perguntas frequentes.</h2>
-            <div className="faq">
-              {FAQS.map((f, i) => (
-                <div key={i} className={`qa ${open === i ? "open" : ""}`}>
-                  <button onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i} aria-controls={`qa-${i}`}>
-                    <span>{f.q}</span><Icon n="plus" />
-                  </button>
-                  <div className="a" id={`qa-${i}`} role="region"><div><p>{f.a}</p></div></div>
-                </div>
-              ))}
-            </div>
-            <p className="faq-note">Se sua dúvida não está aqui, <a href="#acesso">fale com o time</a>. A gente responde em até um dia útil.</p>
-          </div>
-        </section>
-      );
-    };
-
-    // ── Access form ───────────────────────────────────────────────────────────
-    const Access = () => {
-      const [form, setForm] = React.useState({ nome: "", empresa: "", email: "", cnpj: "" });
-      const [errors, setErrors] = React.useState({});
-      const [sent, setSent] = React.useState(false);
-
-      const handle = (e) => {
-        const { name, value } = e.target;
-        setForm({ ...form, [name]: name === "cnpj" ? formatCnpj(value) : value });
-        if (errors[name]) setErrors({ ...errors, [name]: null });
-      };
-      const submit = (e) => {
-        e.preventDefault();
-        const err = {};
-        if (!form.nome.trim()) err.nome = "Informe seu nome.";
-        if (!form.empresa.trim()) err.empresa = "Informe a empresa.";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) err.email = "Use um e-mail válido, ex.: nome@empresa.com.br";
-        if (form.cnpj && form.cnpj.replace(/\D/g, "").length !== 14) err.cnpj = "O CNPJ tem 14 dígitos.";
-        setErrors(err);
-        if (!Object.keys(err).length) setSent(true);
-      };
-      const field = (name, label, props = {}, opt) => (
-        <div className={`field ${errors[name] ? "err" : ""}`}>
-          <label htmlFor={`f-${name}`}>{label}{opt && <span className="opt">opcional</span>}</label>
-          <input id={`f-${name}`} name={name} value={form[name]} onChange={handle} aria-invalid={!!errors[name]} {...props} />
-          {errors[name] && <span className="msg">{errors[name]}</span>}
-        </div>
-      );
-
-      return (
-        <section className="sec" id="acesso">
-          <div className="wrap">
-            <div className="access" data-reveal>
-              <div>
-                <h2 className="h-lg">Faça sua primeira consulta com a gente.</h2>
-                <p className="lead">Deixe seu contato. O time faz uma consulta grátis com você e mostra como a RiskPlus funciona na sua operação.</p>
-                <ul className="perks">
-                  <li><Icon n="check-circle" />1 consulta grátis</li>
-                  <li><Icon n="check-circle" />Sem fidelidade e sem taxa de setup</li>
-                  <li><Icon n="check-circle" />Onboarding incluído</li>
-                </ul>
-              </div>
-              <div className="form">
-                {sent ? (
-                  <div className="done">
-                    <Icon n="check-circle" />
-                    <h3>Recebemos seu contato.</h3>
-                    <p>A gente fala com você pra marcar sua consulta grátis.</p>
-                  </div>
-                ) : (
-                  <form onSubmit={submit} noValidate>
-                    {field("nome", "Nome completo", { placeholder: "Marina Couto", autoComplete: "name" })}
-                    {field("empresa", "Empresa", { placeholder: "Distribuidora Alvorada Ltda", autoComplete: "organization" })}
-                    {field("email", "E-mail corporativo", { type: "email", placeholder: "marina@alvorada.com.br", autoComplete: "email" })}
-                    {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
-                    <button type="submit" className="pill pill-fill">Falar com o time</button>
-                    <p className="fine">Respondemos em até um dia útil.</p>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
-      );
-    };
-
-    // ── Footer ────────────────────────────────────────────────────────────────
-    const Footer = () => (
-      <footer className="foot">
-        <div className="wrap">
-          <p className="note">A RiskPlus usa dados públicos e dados de fontes contratadas, de acordo com a LGPD. As decisões são recomendações. Em operação de valor alto, combine com a política de crédito da sua empresa.</p>
-          <div className="cols">
-            <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#faq">Análise em lote</a><a href="#faq">API</a></div>
-            <div><h4>Empresa</h4><a href="#">Sobre</a><a href="#acesso">Contato</a></div>
-            <div><h4>Recursos</h4><a href="#faq">Central de ajuda</a><a href="#">Segurança e LGPD</a></div>
-            <div><h4>Redes</h4><a href="#">LinkedIn</a><a href="#">X</a><a href="#">GitHub</a></div>
-          </div>
-          <div className="legal">
-            <span>© 2026 RiskPlus Tecnologia Ltda. CNPJ 35.951.627/0001-02, São Paulo.</span>
-            <nav aria-label="Legal"><a href="#">Privacidade</a><a href="#">Termos de uso</a></nav>
-          </div>
-        </div>
-      </footer>
-    );
-
-    const App = () => {
-      useReveal();
-      return (
-        <>
-          <Nav />
-          <main id="main">
-            <Hero />
-            <Marquee />
-            <Differentiators />
-            <HowItWorks />
-            <Product />
-            <Decisions />
-            <FAQ />
-            <Access />
-          </main>
-          <Footer />
-        </>
-      );
-    };
-
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
