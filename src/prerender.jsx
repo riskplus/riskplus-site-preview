@@ -4,11 +4,13 @@ import React from "react";
 import { renderToString } from "react-dom/server";
 import { App, FAQS, LINKEDIN_URL } from "./main.jsx";
 import { PrivacyPage } from "./privacidade.jsx";
+import { DocePage, DOCE_FAQS } from "./doc-e.jsx";
 
 const SITE = "https://riskplus.com.br/";
 
 export const renderApp = () => renderToString(<App />);
 export const renderPrivacy = () => renderToString(<PrivacyPage />);
+export const renderDoce = () => renderToString(<DocePage />);
 
 export const jsonLd = () => [
   {
@@ -34,4 +36,26 @@ export const jsonLd = () => [
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   },
+];
+
+const faqPage = (items) => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: items.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+});
+
+// /doc-e/: produto de software sem preço (a LP não mostra preço) e as perguntas da página.
+export const jsonLdDoce = () => [
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: "Doc-e",
+    url: SITE + "doc-e/",
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    inLanguage: "pt-BR",
+    description: "Reúne os documentos fiscais eletrônicos do CNPJ, recebidos e emitidos, num só lugar: NF-e, NFC-e, NFS-e, CT-e e CT-e OS, com manifestação do destinatário e API.",
+    publisher: { "@type": "Organization", "@id": SITE + "#organization", name: "RiskPlus", url: SITE },
+  },
+  faqPage(DOCE_FAQS),
 ];

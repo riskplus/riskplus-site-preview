@@ -1,13 +1,14 @@
 # Envio do lead (formulário "Falar com o time")
 
-O formulário envia os dados para um Google Apps Script ligado a uma planilha do Google Workspace da RiskPlus. O script:
+O formulário do site e o da LP do Doc-e (`/doc-e/`) enviam os dados para um Google Apps Script ligado a uma planilha do Google Workspace da RiskPlus. O script:
 
 - grava cada lead numa linha da aba **Leads**;
 - manda um e-mail para `comercial@riskplus.com.br` com o assunto "Novo lead do site: {Empresa}". O "Responder" vai direto para o e-mail do lead.
+- marca o produto na coluna **Produto**. O formulário da `/doc-e/` envia `produto: "Doc-e"`: o assunto vira "Novo lead do Doc-e: {Empresa}". Os leads do site saem como "Análise de CNPJ". O script só aceita produtos da lista `PRODUTOS`.
 
 Contra spam, há um campo escondido (robôs preenchem, pessoas não) e um tempo mínimo de 3 segundos entre abrir a página e enviar. Envios que caem nessas regras são descartados sem aviso.
 
-O código está em `apps-script/lead.gs`. A URL do script fica em `LEAD_ENDPOINT`, no `src/main.jsx`. Enquanto ela estiver vazia, o formulário mostra a mensagem de erro com o e-mail do comercial.
+O código está em `apps-script/lead.gs`. A URL do script fica em `LEAD_ENDPOINT`, no `src/main.jsx`. As duas páginas usam a mesma URL. Enquanto ela estiver vazia, o formulário mostra a mensagem de erro com o e-mail do comercial.
 
 ## Instalar (uma vez)
 
@@ -30,6 +31,8 @@ Se a opção **Qualquer pessoa** não aparecer, o administrador do Workspace blo
 ## Mudar o código depois
 
 Ao editar o script, publique em **Implantar → Gerenciar implantações → editar (lápis) → Versão: Nova versão**. Assim a URL continua a mesma. Uma **Nova implantação** cria uma URL nova, e aí é preciso trocar o `LEAD_ENDPOINT`.
+
+Na primeira gravação depois da mudança da coluna **Produto**, o script completa o cabeçalho da aba **Leads** sozinho. As linhas antigas ficam com a coluna vazia.
 
 ## Limites
 

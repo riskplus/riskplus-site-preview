@@ -1,11 +1,14 @@
-// Recebe o lead do formulário do site, grava na planilha e avisa o comercial por e-mail.
+// Recebe o lead do formulário do site e da LP do Doc-e, grava na planilha e avisa o comercial por e-mail.
 // Roda como Google Apps Script ligado a uma planilha. Instalação: docs/envio-do-lead.md.
 
 const DESTINO = "comercial@riskplus.com.br";
 const ABA = "Leads";
 const TEMPO_MINIMO_MS = 3000;      // envio mais rápido que isso é robô
 const LIMITE_POR_MINUTO = 20;      // trava de segurança contra rajada de envios
-const CABECALHO = ["Data", "Nome", "Empresa", "E-mail", "WhatsApp", "CNPJ", "Página"];
+const CABECALHO = ["Data", "Nome", "Empresa", "E-mail", "WhatsApp", "CNPJ", "Página", "Produto"];
+// Produtos com formulário próprio. O site não manda `produto` e cai no padrão.
+const PRODUTO_SITE = "Análise de CNPJ";
+const PRODUTOS = ["Doc-e"];
 
 function doPost(e) {
   try {
@@ -22,6 +25,8 @@ function doPost(e) {
       whatsapp: texto(d.whatsapp),
       cnpj: texto(d.cnpj),
       pagina: texto(d.pagina),
+      // Só aceita produtos conhecidos: o valor vai para o assunto do e-mail.
+      produto: PRODUTOS.indexOf(texto(d.produto)) >= 0 ? texto(d.produto) : "",
     };
     const tel = v.whatsapp.replace(/\D/g, "");
     if (!v.nome || !v.empresa || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email) || tel.length < 10 || tel.length > 11) {
@@ -33,7 +38,7 @@ function doPost(e) {
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try {
-      aba().appendRow([quando, v.nome, v.empresa, v.email, v.whatsapp, v.cnpj, v.pagina].map(celula));
+      aba().appendRow([quando, v.nome, v.empresa, v.email, v.whatsapp, v.cnpj, v.pagina, v.produto || PRODUTO_SITE].map(celula));
     } finally {
       lock.releaseLock();
     }
@@ -43,9 +48,9 @@ function doPost(e) {
       to: DESTINO,
       replyTo: v.email,
       name: "Site RiskPlus",
-      subject: "Novo lead do site: " + v.empresa,
+      subject: (v.produto ? "Novo lead do " + v.produto + ": " : "Novo lead do site: ") + v.empresa,
       body: [
-        "Novo contato pelo formulário do site.",
+        v.produto ? "Novo contato pelo formulário do " + v.produto + "." : "Novo contato pelo formulário do site.",
         "",
         "Nome: " + v.nome,
         "Empresa: " + v.empresa,
@@ -84,6 +89,8 @@ function aba() {
   let a = planilha.getSheetByName(ABA);
   if (!a) a = planilha.insertSheet(ABA);
   if (a.getLastRow() === 0) a.appendRow(CABECALHO);
+  // Planilha criada antes da coluna "Produto": completa o cabeçalho sem mexer nas linhas antigas.
+  else if (a.getLastColumn() < CABECALHO.length) a.getRange(1, 1, 1, CABECALHO.length).setValues([CABECALHO]);
   return a;
 }
 

@@ -453,14 +453,16 @@ const Decisions = () => (
 );
 
 // ── FAQ ───────────────────────────────────────────────────────────────────
-const FAQ = () => {
+const FAQ_NOTE = <>Se sua dúvida não está aqui, <a href="#acesso">fale com o time</a>. A gente responde em até um dia útil.</>;
+// A /doc-e/ usa o mesmo acordeão com as próprias perguntas e sem a nota final.
+const FAQ = ({ items = FAQS, note = FAQ_NOTE }) => {
   const [open, setOpen] = React.useState(-1);
   return (
     <section className="sec tile" id="faq">
       <div className="wrap-narrow">
         <h2 className="h-lg center" data-reveal>Perguntas frequentes.</h2>
         <div className="faq">
-          {FAQS.map((f, i) => (
+          {items.map((f, i) => (
             <div key={i} className={`qa ${open === i ? "open" : ""}`}>
               <button type="button" onClick={() => setOpen(open === i ? -1 : i)} aria-expanded={open === i} aria-controls={`qa-${i}`}>
                 <span>{f.q}</span><Icon n="plus" />
@@ -469,7 +471,7 @@ const FAQ = () => {
             </div>
           ))}
         </div>
-        <p className="faq-note">Se sua dúvida não está aqui, <a href="#acesso">fale com o time</a>. A gente responde em até um dia útil.</p>
+        {note && <p className="faq-note">{note}</p>}
       </div>
     </section>
   );
@@ -540,7 +542,8 @@ const CookieBanner = () => {
 // Vazia, o formulário mostra o erro com o e-mail do comercial.
 const LEAD_ENDPOINT = "";
 
-const Access = () => {
+// Formulário de contato. O site usa sem `produto`; a /doc-e/ manda produto "Doc-e", que vai no assunto e na planilha.
+const LeadForm = ({ produto, cta = "Falar com o time", doneText = "A gente fala com você pra marcar sua consulta grátis." }) => {
   const [form, setForm] = React.useState({ nome: "", empresa: "", email: "", whatsapp: "", cnpj: "" });
   const [errors, setErrors] = React.useState({});
   const [sent, setSent] = React.useState(false);
@@ -582,12 +585,12 @@ const Access = () => {
       const res = await fetch(LEAD_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify({ ...form, site: hp, ms: Date.now() - startedAt.current, pagina: location.href }),
+        body: JSON.stringify({ ...form, ...(produto ? { produto } : {}), site: hp, ms: Date.now() - startedAt.current, pagina: location.href }),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.erro || "falha");
       setSent(true);
-      track("generate_lead", { form: "acesso" });
+      track("generate_lead", { form: produto ? produto.toLowerCase() : "acesso" });
     } catch {
       setStatus("error");
     }
@@ -601,55 +604,55 @@ const Access = () => {
     </div>
   );
 
-  return (
-    <section className="sec" id="acesso">
-      <div className="wrap">
-        <div className="access" data-reveal>
-          <div>
-            <h2 className="h-lg">Faça sua primeira consulta com a gente.</h2>
-            <p className="lead">Deixe seu contato. O time faz uma consulta grátis com você e mostra como a RiskPlus funciona na sua operação.</p>
-            <ul className="perks">
-              <li><Icon n="check-circle" />1 consulta grátis</li>
-              <li><Icon n="check-circle" />Sem fidelidade e sem taxa de setup</li>
-              <li><Icon n="check-circle" />Onboarding incluído</li>
-            </ul>
-          </div>
-          <div className="form">
-            {sent ? (
-              <div className="done">
-                <Icon n="check-circle" />
-                <h3>Recebemos seu contato.</h3>
-                <p>A gente fala com você pra marcar sua consulta grátis.</p>
-              </div>
-            ) : (
-              <form onSubmit={submit} noValidate ref={formRef}>
-                {field("nome", "Nome completo", { placeholder: "Seu nome", autoComplete: "name" })}
-                {field("empresa", "Empresa", { placeholder: "Nome da empresa", autoComplete: "organization" })}
-                {field("email", "E-mail corporativo", { type: "email", placeholder: "voce@empresa.com.br", autoComplete: "email" })}
-                {field("whatsapp", "WhatsApp", { type: "tel", placeholder: "(11) 91234-5678", inputMode: "tel", autoComplete: "tel" })}
-                {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
-                <div className="hp" aria-hidden="true">
-                  <label htmlFor="f-site">Site</label>
-                  <input id="f-site" name="site" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
-                </div>
-                <p className="consent">Ao enviar, você concorda com a <a href="privacidade/">Política de Privacidade</a>.</p>
-                <button type="submit" className="pill pill-fill" disabled={status === "sending"}>
-                  {status === "sending" ? "Enviando…" : "Falar com o time"}
-                </button>
-                {status === "error" && (
-                  <p className="send-err" role="alert">
-                    Não conseguimos enviar agora. Tente de novo ou escreva para <a href="mailto:comercial@riskplus.com.br">comercial@riskplus.com.br</a>.
-                  </p>
-                )}
-                <p className="fine">Respondemos em até um dia útil.</p>
-              </form>
-            )}
-          </div>
-        </div>
+  return sent ? (
+    <div className="done">
+      <Icon n="check-circle" />
+      <h3>Recebemos seu contato.</h3>
+      <p>{doneText}</p>
+    </div>
+  ) : (
+    <form onSubmit={submit} noValidate ref={formRef}>
+      {field("nome", "Nome completo", { placeholder: "Seu nome", autoComplete: "name" })}
+      {field("empresa", "Empresa", { placeholder: "Nome da empresa", autoComplete: "organization" })}
+      {field("email", "E-mail corporativo", { type: "email", placeholder: "voce@empresa.com.br", autoComplete: "email" })}
+      {field("whatsapp", "WhatsApp", { type: "tel", placeholder: "(11) 91234-5678", inputMode: "tel", autoComplete: "tel" })}
+      {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
+      <div className="hp" aria-hidden="true">
+        <label htmlFor="f-site">Site</label>
+        <input id="f-site" name="site" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
       </div>
-    </section>
+      <p className="consent">Ao enviar, você concorda com a <a href="privacidade/">Política de Privacidade</a>.</p>
+      <button type="submit" className="pill pill-fill" disabled={status === "sending"}>
+        {status === "sending" ? "Enviando…" : cta}
+      </button>
+      {status === "error" && (
+        <p className="send-err" role="alert">
+          Não conseguimos enviar agora. Tente de novo ou escreva para <a href="mailto:comercial@riskplus.com.br">comercial@riskplus.com.br</a>.
+        </p>
+      )}
+      <p className="fine">Respondemos em até um dia útil.</p>
+    </form>
   );
 };
+
+const Access = () => (
+  <section className="sec" id="acesso">
+    <div className="wrap">
+      <div className="access" data-reveal>
+        <div>
+          <h2 className="h-lg">Faça sua primeira consulta com a gente.</h2>
+          <p className="lead">Deixe seu contato. O time faz uma consulta grátis com você e mostra como a RiskPlus funciona na sua operação.</p>
+          <ul className="perks">
+            <li><Icon n="check-circle" />1 consulta grátis</li>
+            <li><Icon n="check-circle" />Sem fidelidade e sem taxa de setup</li>
+            <li><Icon n="check-circle" />Onboarding incluído</li>
+          </ul>
+        </div>
+        <div className="form"><LeadForm /></div>
+      </div>
+    </div>
+  </section>
+);
 
 // Preencher quando a página da RiskPlus no LinkedIn existir. Vazio esconde a coluna "Redes".
 const LINKEDIN_URL = "";
@@ -660,7 +663,7 @@ const Footer = () => (
     <div className="wrap">
       <p className="note">A RiskPlus usa dados públicos e dados de parceiros contratados. As recomendações apoiam a sua análise de risco, e a decisão de vender a prazo é sempre da sua empresa.</p>
       <div className="cols">
-        <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#faq">Análise em lote</a><a href="#faq">API</a></div>
+        <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#faq">Análise em lote</a><a href="#faq">API</a><a href="doc-e/">Doc-e: documentos fiscais</a></div>
         <div><h4>Empresa</h4><a href="#acesso">Contato</a><a href="privacidade/">Segurança e LGPD</a></div>
         {LINKEDIN_URL && <div><h4>Redes</h4><a href={LINKEDIN_URL} target="_blank" rel="noopener">LinkedIn</a></div>}
       </div>
@@ -697,4 +700,4 @@ const App = () => {
 };
 
 // A montagem fica em src/client.jsx (navegador) e src/prerender.jsx (HTML pronto no build).
-export { App, FAQS, LINKEDIN_URL, Logo, Footer, CookieBanner };
+export { App, FAQS, LINKEDIN_URL, Logo, Icon, FAQ, LeadForm, Footer, CookieBanner, useReveal, GA_ID, openCookies };
