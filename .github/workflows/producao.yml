@@ -1,0 +1,80 @@
+# Publica o site em produção (riskplus.com.br) a cada push na main.
+# Gera dist/ com `npm run build` e copia para a VPS com rsync por SSH.
+# Configuração do servidor e dos secrets: docs/deploy-producao.md.
+# Enquanto as variáveis não existirem, o job só avisa e não falha.
+name: Produção
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: producao
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: producao
+      url: https://riskplus.com.br/
+    env:
+      DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+      DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+      HAS_KEY: ${{ secrets.DEPLOY_SSH_KEY != '' }}
+    steps:
+      - name: Conferir configuração
+        id: cfg
+        run: |
+          if [ -z "$DEPLOY_HOST" ] || [ -z "$DEPLOY_USER" ] || [ -z "$DEPLOY_PATH" ] || [ "$HAS_KEY" != "true" ]; then
+            echo "::warning::Deploy de produção não configurado. Veja docs/deploy-producao.md."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.cfg.outputs.ok == 'true'
+        uses: actions/checkout@v4
+
+      - if: steps.cfg.outputs.ok == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - if: steps.cfg.outputs.ok == 'true'
+        run: npm ci && npm run build
+
+      - name: Preparar SSH
+        if: steps.cfg.outputs.ok == 'true'
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy
+          chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Enviar dist/
+        if: steps.cfg.outputs.ok == 'true'
+        # --delay-updates troca os arquivos no fim, para o site não ficar meio atualizado.
+        run: |
+          rsync -rlz --checksum --delete-after --delay-updates \
+            -e "ssh -i ~/.ssh/deploy -o StrictHostKeyChecking=yes" \
+            dist/ "$DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH/"
+
+      - name: Conferir o site no ar
+        if: steps.cfg.outputs.ok == 'true'
+        run: |
+          js=$(ls dist/app-*.js | xargs -n1 basename)
+          for i in 1 2 3 4 5; do
+            if curl -fsS https://riskplus.com.br/ | grep -q "$js"; then echo "No ar: $js"; exit 0; fi
+            sleep 5
+          done
+          echo "::error::riskplus.com.br não está servindo $js"; exit 1
