@@ -3,7 +3,7 @@
 // Copy aprovada pelos sócios em 20/11/2026: não mude o texto sem passar pela especificação.
 // Telas: mocks em HTML com os rótulos do app real e dados fictícios (CNPJ e chave sempre mascarados).
 import React from "react";
-import { Icon, FAQ, LeadForm, CookieBanner, useReveal, GA_ID, openCookies } from "./main.jsx";
+import { Icon, FAQ, LeadForm, CookieBanner, useReveal, GA_ID, openCookies, LINKEDIN_URL } from "./main.jsx";
 
 // A página tem <base href="../">: as âncoras levam o caminho da página para não voltarem à home.
 const A = (id) => `doc-e/#${id}`;
@@ -285,7 +285,10 @@ const Footer = () => (
     <div className="wrap">
       <div className="dx-foot-top">
         <Brand />
-        <a href="./">riskplus.com.br</a>
+        <nav className="dx-foot-links" aria-label="RiskPlus">
+          <a href="./">riskplus.com.br</a>
+          {LINKEDIN_URL && <a href={LINKEDIN_URL} target="_blank" rel="noopener">LinkedIn</a>}
+        </nav>
       </div>
       <div className="legal">
         <span>© 2026 RiskPlus Tecnologia Ltda. CNPJ 35.951.627/0001-02, São Paulo.</span>

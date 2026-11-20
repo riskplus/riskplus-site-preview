@@ -617,8 +617,8 @@ const Access = () => (
   </section>
 );
 
-// Preencher quando a página da RiskPlus no LinkedIn existir. Vazio esconde a coluna "Redes".
-const LINKEDIN_URL = "";
+// Página da RiskPlus no LinkedIn. Vazio esconde a coluna "Redes" e tira o sameAs do schema.
+const LINKEDIN_URL = "https://www.linkedin.com/company/riskplus-br/";
 
 // ── Footer ────────────────────────────────────────────────────────────────
 const Footer = () => (
