@@ -407,6 +407,11 @@
     .res-ex { margin-left: auto; align-self: flex-start; font-size: 12px; font-weight: 600; color: var(--muted); background: var(--tile); padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
     .form .pill { width: 100%; margin-top: 8px; padding: 14px; }
     .form .fine { font-size: 13px; color: var(--muted); text-align: center; margin-top: 14px; }
+    /* Campo escondido contra robôs: fora da tela, sem display:none (alguns robôs pulam esses). */
+    .form .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .form .send-err { font-size: 14px; color: var(--stop); margin: 12px 0 0; text-align: center; }
+    .form .send-err a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+    .form button[disabled] { opacity: .7; cursor: progress; }
     .done { text-align: center; padding: 48px 8px; animation: load-in .6s var(--ease); }
     .done i { font-size: 48px; color: var(--go); }
     .done h3 { font-size: 28px; margin: 14px 0 8px; }
