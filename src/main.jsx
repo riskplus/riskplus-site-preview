@@ -477,10 +477,17 @@ const FAQ = () => {
 };
 
 // ── Access form ───────────────────────────────────────────────────────────
+// URL do Google Apps Script que recebe o lead (docs/envio-do-lead.md).
+// Vazia, o formulário mostra o erro com o e-mail do comercial.
+const LEAD_ENDPOINT = "";
+
 const Access = () => {
   const [form, setForm] = React.useState({ nome: "", empresa: "", email: "", whatsapp: "", cnpj: "" });
   const [errors, setErrors] = React.useState({});
   const [sent, setSent] = React.useState(false);
+  const [status, setStatus] = React.useState("idle"); // idle | sending | error
+  const [hp, setHp] = React.useState(""); // campo escondido contra robôs
+  const startedAt = React.useRef(Date.now());
   const formRef = React.useRef(null);
 
   // CNPJ digitado na demo do hero chega aqui já preenchido.
@@ -495,19 +502,35 @@ const Access = () => {
     setForm({ ...form, [name]: name === "cnpj" ? formatCnpj(value) : value });
     if (errors[name]) setErrors({ ...errors, [name]: null });
   };
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
+    if (status === "sending") return;
     const err = {};
     if (!form.nome.trim()) err.nome = "Informe seu nome.";
     if (!form.empresa.trim()) err.empresa = "Informe a empresa.";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) err.email = "Use um e-mail válido, ex.: nome@empresa.com.br";
     const tel = form.whatsapp.replace(/\D/g, "");
-    if (tel && (tel.length < 10 || tel.length > 11)) err.whatsapp = "Use DDD e número, ex.: (11) 91234-5678";
+    if (tel.length < 10 || tel.length > 11) err.whatsapp = "Informe o WhatsApp com DDD, ex.: (11) 91234-5678";
     if (form.cnpj && form.cnpj.replace(/\D/g, "").length !== 14) err.cnpj = "O CNPJ tem 14 dígitos.";
     setErrors(err);
     const first = Object.keys(err)[0];
-    if (first) formRef.current?.querySelector(`#f-${first}`)?.focus();
-    else setSent(true);
+    if (first) { formRef.current?.querySelector(`#f-${first}`)?.focus(); return; }
+
+    setStatus("sending");
+    try {
+      if (!LEAD_ENDPOINT) throw new Error("LEAD_ENDPOINT vazio");
+      // text/plain evita o preflight de CORS, que o Apps Script não responde.
+      const res = await fetch(LEAD_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ ...form, site: hp, ms: Date.now() - startedAt.current, pagina: location.href }),
+      });
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.erro || "falha");
+      setSent(true);
+    } catch {
+      setStatus("error");
+    }
   };
   const field = (name, label, props = {}, opt) => (
     <div className={`field ${errors[name] ? "err" : ""}`}>
@@ -543,10 +566,21 @@ const Access = () => {
                 {field("nome", "Nome completo", { placeholder: "Seu nome", autoComplete: "name" })}
                 {field("empresa", "Empresa", { placeholder: "Nome da empresa", autoComplete: "organization" })}
                 {field("email", "E-mail corporativo", { type: "email", placeholder: "voce@empresa.com.br", autoComplete: "email" })}
-                {field("whatsapp", "WhatsApp", { type: "tel", placeholder: "(11) 91234-5678", inputMode: "tel", autoComplete: "tel" }, true)}
+                {field("whatsapp", "WhatsApp", { type: "tel", placeholder: "(11) 91234-5678", inputMode: "tel", autoComplete: "tel" })}
                 {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
+                <div className="hp" aria-hidden="true">
+                  <label htmlFor="f-site">Site</label>
+                  <input id="f-site" name="site" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
+                </div>
                 <p className="consent">Ao enviar, você concorda com a <a href="/privacidade">Política de Privacidade</a>.</p>
-                <button type="submit" className="pill pill-fill">Falar com o time</button>
+                <button type="submit" className="pill pill-fill" disabled={status === "sending"}>
+                  {status === "sending" ? "Enviando…" : "Falar com o time"}
+                </button>
+                {status === "error" && (
+                  <p className="send-err" role="alert">
+                    Não conseguimos enviar agora. Tente de novo ou escreva para <a href="mailto:comercial@riskplus.com.br">comercial@riskplus.com.br</a>.
+                  </p>
+                )}
                 <p className="fine">Respondemos em até um dia útil.</p>
               </form>
             )}
