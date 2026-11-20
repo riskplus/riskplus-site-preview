@@ -287,17 +287,16 @@
     @keyframes slide { to { transform: translateX(-50%); } }
     .marquee:hover .track { animation-play-state: paused; }
 
-    /* Scroll-lit statements */
-    .lit-head { margin-bottom: 80px; }
-    .lit-list { display: grid; gap: 56px; max-width: 900px; margin: 0 auto; }
-    .js .lit { color: var(--line); transition: color .7s var(--ease); }
-    .lit h3 { font-size: clamp(28px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -.03em; }
-    .lit h3 b { transition: color .7s var(--ease); }
-    .lit p { margin-top: 12px; font-size: 17px; }
-    .js .lit p { color: transparent; transition: color .7s var(--ease); }
-    .js .lit[data-on] { color: var(--ink); }
-    .js .lit[data-on] h3 b { color: var(--accent); }
-    .js .lit[data-on] p { color: var(--muted); }
+    /* Diferenciais: tabela comparativa */
+    .lit-head { margin-bottom: 64px; }
+    .cmp { max-width: 960px; margin: 0 auto; }
+    .cmp-row { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; padding: 30px 0; border-bottom: 1px solid var(--line); align-items: start; }
+    .cmp-head { padding: 0 0 14px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    .cmp-head span:first-child { color: var(--accent); }
+    .cmp-row h3 { font-size: clamp(22px, 2.3vw, 28px); line-height: 1.18; letter-spacing: -.02em; color: var(--ink); }
+    .cmp-row h3 b { color: var(--accent); font-weight: inherit; }
+    .cmp-row p { font-size: 16px; line-height: 1.55; color: var(--muted); padding-top: 4px; }
+    .cmp-tag { display: none; }
 
     /* Gallery */
     .gal-head { margin-bottom: 40px; }
@@ -614,7 +613,11 @@
       .sec { padding: 88px 0; }
       .demo { padding: 22px 18px 26px; }
       .demo-stage { min-height: 380px; }
-      .lit-list { gap: 40px; }
+      .cmp-head { display: none; }
+      .cmp-row { grid-template-columns: 1fr; gap: 10px; padding: 24px 0; }
+      .cmp-head + .cmp-row { border-top: 1px solid var(--line); }
+      .cmp-row p { padding-top: 0; font-size: 15px; }
+      .cmp-tag { display: block; margin-bottom: 2px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
       .gcard { padding: 30px 26px; }
       .pcard { padding: 28px 22px; }
       .pcard-top { flex-wrap: wrap; }
