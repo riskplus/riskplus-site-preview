@@ -1,7 +1,7 @@
 // Página /privacidade/. O build gera o HTML (src/prerender.jsx) e o navegador só hidrata o aviso de cookies.
 // Rascunho para revisão jurídica: não mude o texto sem passar pelo advogado.
 import React from "react";
-import { Logo, Footer, CookieBanner } from "./main.jsx";
+import { Logo, ThemeToggle, Footer, CookieBanner } from "./main.jsx";
 
 export const PRIVACY_UPDATED = "20 de novembro de 2026";
 
@@ -17,7 +17,10 @@ export const PrivacyPage = () => (
     <header className="gnav">
       <div className="wrap">
         <a href="./" className="logo" aria-label="RiskPlus, voltar ao site"><Logo /></a>
-        <a href="./#acesso" className="pill pill-fill pill-sm pp-cta">Falar com o time</a>
+        <div className="pp-right">
+          <a href="./#acesso" className="pill pill-fill pill-sm pp-cta">Falar com o time</a>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
     <main id="main" className="pp">

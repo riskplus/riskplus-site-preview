@@ -4,7 +4,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 const USED = {
-  regular: ["arrow-right", "check-circle", "circle", "list", "plus", "x"],
+  regular: ["arrow-right", "check-circle", "circle", "list", "moon", "plus", "sun", "x"],
   bold: [
     "calendar-blank", "caret-left", "caret-right", "check", "check-circle", "circle",
     "circle-notch", "clock", "lock-simple", "shield-check", "trend-down", "trend-up",

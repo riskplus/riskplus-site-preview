@@ -82,6 +82,30 @@ const Logo = () => (
   </>
 );
 
+// Seletor de tema claro/escuro. Sem escolha salva, o site segue o tema do sistema.
+const THEME_KEY = "rp-theme";
+const currentTheme = () => {
+  const t = document.documentElement.dataset.theme;
+  if (t === "light" || t === "dark") return t;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
+const ThemeToggle = () => (
+  <button
+    type="button"
+    className="theme-btn"
+    aria-label="Alternar entre tema claro e escuro"
+    title="Tema claro ou escuro"
+    onClick={() => {
+      const next = currentTheme() === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem(THEME_KEY, next); } catch { /* navegador sem storage */ }
+    }}
+  >
+    <span className="ic-moon"><Icon n="moon" /></span>
+    <span className="ic-sun"><Icon n="sun" /></span>
+  </button>
+);
+
 // Fades [data-reveal] elements in once they enter the viewport.
 const useReveal = () => {
   React.useEffect(() => {
@@ -130,6 +154,7 @@ const Nav = () => {
           </nav>
           <div className="right">
             <a href="#acesso" className="pill pill-fill pill-sm">Falar com o time</a>
+            <ThemeToggle />
             <button type="button" className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
           </div>
         </div>
@@ -663,4 +688,4 @@ const App = () => {
 };
 
 // A montagem fica em src/client.jsx (navegador) e src/prerender.jsx (HTML pronto no build).
-export { App, FAQS, LINKEDIN_URL, Logo, Icon, FAQ, LeadForm, Footer, CookieBanner, useReveal, GA_ID, openCookies };
+export { App, FAQS, LINKEDIN_URL, Logo, Icon, ThemeToggle, FAQ, LeadForm, Footer, CookieBanner, useReveal, GA_ID, openCookies };
