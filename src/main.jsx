@@ -526,7 +526,7 @@ const CookieBanner = () => {
   };
   return (
     <div className="cookies" role="region" aria-label="Aviso de cookies">
-      <p>Usamos cookies do Google Analytics para entender como as pessoas usam o site. Eles só são ativados se você aceitar. Saiba mais na <a href="/privacidade">Política de Privacidade</a>.</p>
+      <p>Usamos cookies do Google Analytics para entender como as pessoas usam o site. Eles só são ativados se você aceitar. Saiba mais na <a href="privacidade/">Política de Privacidade</a>.</p>
       <div className="cookies-btns">
         <button type="button" className="pill pill-line pill-sm" onClick={() => choose("recusado")}>Recusar</button>
         <button type="button" className="pill pill-fill pill-sm" onClick={() => choose("aceito")}>Aceitar</button>
@@ -632,7 +632,7 @@ const Access = () => {
                   <label htmlFor="f-site">Site</label>
                   <input id="f-site" name="site" tabIndex={-1} autoComplete="off" value={hp} onChange={(e) => setHp(e.target.value)} />
                 </div>
-                <p className="consent">Ao enviar, você concorda com a <a href="/privacidade">Política de Privacidade</a>.</p>
+                <p className="consent">Ao enviar, você concorda com a <a href="privacidade/">Política de Privacidade</a>.</p>
                 <button type="submit" className="pill pill-fill" disabled={status === "sending"}>
                   {status === "sending" ? "Enviando…" : "Falar com o time"}
                 </button>
@@ -661,13 +661,13 @@ const Footer = () => (
       <p className="note">A RiskPlus usa dados públicos e dados de parceiros contratados. As recomendações apoiam a sua análise de risco, e a decisão de vender a prazo é sempre da sua empresa.</p>
       <div className="cols">
         <div><h4>Produto</h4><a href="#produto">Análise de CNPJ</a><a href="#faq">Análise em lote</a><a href="#faq">API</a></div>
-        <div><h4>Empresa</h4><a href="#acesso">Contato</a><a href="/privacidade">Segurança e LGPD</a></div>
+        <div><h4>Empresa</h4><a href="#acesso">Contato</a><a href="privacidade/">Segurança e LGPD</a></div>
         {LINKEDIN_URL && <div><h4>Redes</h4><a href={LINKEDIN_URL} target="_blank" rel="noopener">LinkedIn</a></div>}
       </div>
       <div className="legal">
         <span>© 2026 RiskPlus Tecnologia Ltda. CNPJ 35.951.627/0001-02, São Paulo.</span>
         <nav aria-label="Legal">
-          <a href="/privacidade">Privacidade</a>
+          <a href="privacidade/">Privacidade</a>
           {GA_ID && <button type="button" onClick={openCookies}>Cookies</button>}
         </nav>
       </div>
@@ -697,4 +697,4 @@ const App = () => {
 };
 
 // A montagem fica em src/client.jsx (navegador) e src/prerender.jsx (HTML pronto no build).
-export { App, FAQS, LINKEDIN_URL };
+export { App, FAQS, LINKEDIN_URL, Logo, Footer, CookieBanner };

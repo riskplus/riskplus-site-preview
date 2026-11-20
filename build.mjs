@@ -41,12 +41,37 @@ async function prerender() {
   });
   // A query força o Node a reimportar o arquivo novo no modo watch.
   const mod = await import(`${pathToFileURL(file).href}?v=${++runs}`);
-  return { html: mod.renderApp(), ld: mod.jsonLd() };
+  return { html: mod.renderApp(), ld: mod.jsonLd(), privacy: mod.renderPrivacy() };
 }
 
 // "<" escapado impede que um texto feche a tag <script> do JSON-LD.
 const ldTags = (items) =>
   items.map((o) => `  <script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`).join("\n");
+
+// /privacidade/ usa o mesmo <head> e CSS, com título, descrição e endereço próprios.
+// O <base href="../"> faz os caminhos relativos (assets, bundle, #âncoras) apontarem para a raiz do site.
+const PRIVACY_TITLE = "Política de Privacidade · RiskPlus";
+const PRIVACY_DESC = "Quais dados pessoais a RiskPlus trata no site e no serviço de análise de empresas, por quê, com quem compartilha e como exercer seus direitos.";
+const PRIVACY_URL = "https://riskplus.com.br/privacidade/";
+function privacyPage(html, body) {
+  const swaps = [
+    [/<title>[^<]*<\/title>/, `<title>${PRIVACY_TITLE}</title>`],
+    [/(<meta name="description" content=")[^"]*/, `$1${PRIVACY_DESC}`],
+    [/(<link rel="canonical" href=")[^"]*/, `$1${PRIVACY_URL}`],
+    [/(<meta property="og:url" content=")[^"]*/, `$1${PRIVACY_URL}`],
+    [/(<meta property="og:title" content=")[^"]*/, `$1${PRIVACY_TITLE}`],
+    [/(<meta name="twitter:title" content=")[^"]*/, `$1${PRIVACY_TITLE}`],
+    [/(<meta property="og:description" content=")[^"]*/, `$1${PRIVACY_DESC}`],
+    [/(<meta name="twitter:description" content=")[^"]*/, `$1${PRIVACY_DESC}`],
+    [/<head>/, `<head>\n  <base href="../" />`],
+    [/<div id="root"><\/div>/, `<div id="root" data-page="privacidade">${body}</div>`],
+  ];
+  for (const [re, to] of swaps) {
+    if (!re.test(html)) throw new Error(`index.html: não achei ${re}`);
+    html = html.replace(re, to);
+  }
+  return html;
+}
 
 // Copia os arquivos estáticos e escreve o index.html com o conteúdo pronto e o bundle gerado.
 async function writePage(result) {
@@ -56,12 +81,13 @@ async function writePage(result) {
   for (const tag of ['<script src="app.js"></script>', '<div id="root"></div>', "</head>"]) {
     if (!html.includes(tag)) throw new Error(`index.html precisa ter ${tag}`);
   }
-  const { html: body, ld } = await prerender();
-  html = html
-    .replace('<script src="app.js"></script>', `<script src="${name}"></script>`)
+  const { html: body, ld, privacy } = await prerender();
+  html = html.replace('<script src="app.js"></script>', `<script src="${name}"></script>`);
+  await writeFile(`${OUT}/index.html`, html
     .replace('<div id="root"></div>', `<div id="root">${body}</div>`)
-    .replace("</head>", `${ldTags(ld)}\n</head>`);
-  await writeFile(`${OUT}/index.html`, html);
+    .replace("</head>", `${ldTags(ld)}\n</head>`));
+  await mkdir(`${OUT}/privacidade`, { recursive: true });
+  await writeFile(`${OUT}/privacidade/index.html`, privacyPage(html, privacy));
   await cp("assets", `${OUT}/assets`, { recursive: true });
   // static/ vai para a raiz do site (robots.txt, sitemap.xml).
   await cp("static", OUT, { recursive: true });
