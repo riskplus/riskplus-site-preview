@@ -130,7 +130,7 @@ const Nav = () => {
             {NAV.map((l) => <a key={l.href} href={l.href} className={active === l.href ? "active" : ""}>{l.label}</a>)}
           </nav>
           <div className="right">
-            <a href="#acesso" className="pill pill-warn pill-sm">Falar com o time</a>
+            <a href="#acesso" className="pill pill-fill pill-sm">Falar com o time</a>
             <button type="button" className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
           </div>
         </div>
@@ -540,9 +540,9 @@ const Access = () => {
               </div>
             ) : (
               <form onSubmit={submit} noValidate ref={formRef}>
-                {field("nome", "Nome completo", { placeholder: "Marina Couto", autoComplete: "name" })}
-                {field("empresa", "Empresa", { placeholder: "Distribuidora Alvorada Ltda", autoComplete: "organization" })}
-                {field("email", "E-mail corporativo", { type: "email", placeholder: "marina@alvorada.com.br", autoComplete: "email" })}
+                {field("nome", "Nome completo", { placeholder: "Seu nome", autoComplete: "name" })}
+                {field("empresa", "Empresa", { placeholder: "Nome da empresa", autoComplete: "organization" })}
+                {field("email", "E-mail corporativo", { type: "email", placeholder: "voce@empresa.com.br", autoComplete: "email" })}
                 {field("whatsapp", "WhatsApp", { type: "tel", placeholder: "(11) 91234-5678", inputMode: "tel", autoComplete: "tel" }, true)}
                 {field("cnpj", "CNPJ da empresa", { placeholder: "00.000.000/0001-00", inputMode: "numeric" }, true)}
                 <p className="consent">Ao enviar, você concorda com a <a href="/privacidade">Política de Privacidade</a>.</p>
