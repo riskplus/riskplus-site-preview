@@ -21,7 +21,7 @@
   <meta name="twitter:description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B." />
   <meta name="twitter:image" content="https://riskplus.com.br/assets/og.png" />
   <meta name="color-scheme" content="light dark" />
-  <script>document.documentElement.classList.add("js")</script>
+  <script>document.documentElement.classList.add("js");try{var t=localStorage.getItem("rp-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="icon" href="assets/icon-blue.svg" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
@@ -107,8 +107,9 @@
     }
     /* Dark scheme built from the DS neutrals (the guide defines light only) */
     .logo-dark { display: none !important; }
+    /* Tema escuro: segue o sistema, a menos que o visitante escolha no seletor do topo (data-theme) */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --page:  var(--rp-ink);
         --tile:  #111623;
         --raised: var(--rp-graphite);
@@ -127,9 +128,32 @@
         --caution: var(--rp-orange-300); --caution-soft: #2E1A0F;
         --stop: #F07587; --stop-soft: #2E1218;
       }
-      .logo-light { display: none !important; }
-      .logo-dark { display: block !important; }
+      :root:not([data-theme="light"]) .logo-light { display: none !important; }
+      :root:not([data-theme="light"]) .logo-dark { display: block !important; }
     }
+    :root[data-theme="dark"] {
+      --page:  var(--rp-ink);
+      --tile:  #111623;
+      --raised: var(--rp-graphite);
+      --ink:   var(--rp-slate-50);
+      --ink-2: var(--rp-slate-200);
+      --muted: var(--rp-slate-400);
+      --faint: var(--rp-slate-600);
+      --line:  var(--rp-slate-700);
+      --hair:  rgba(255,255,255,.1);
+      --accent:      var(--rp-blue-400);
+      --accent-hov:  var(--rp-blue-300);
+      --accent-soft: var(--rp-blue-900);
+      --dark:   #05070C;
+      --dark-2: var(--rp-graphite);
+      --go: #4FCB8B; --go-soft: #0F2A1E;
+      --caution: var(--rp-orange-300); --caution-soft: #2E1A0F;
+      --stop: #F07587; --stop-soft: #2E1218;
+    }
+    :root[data-theme="dark"] .logo-light { display: none !important; }
+    :root[data-theme="dark"] .logo-dark { display: block !important; }
+    :root[data-theme="light"] { color-scheme: light; }
+    :root[data-theme="dark"] { color-scheme: dark; }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -179,10 +203,20 @@
     .gnav { position: sticky; top: 0; z-index: var(--z-nav); height: var(--nav-h); background: color-mix(in srgb, var(--page) 80%, transparent); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--hair); }
     .gnav .wrap { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .gnav .logo img { height: 48px; display: block; }
+    .gnav .logo { flex: none; }
+    .gnav .logo img { max-width: none; width: auto; }
     .gnav nav { display: flex; gap: 32px; }
     .gnav nav a { font-size: 14px; font-weight: 500; color: var(--ink-2); opacity: .85; transition: opacity .2s, color .2s; }
     .gnav nav a:hover, .gnav nav a.active { opacity: 1; color: var(--ink); }
     .gnav .right { display: flex; align-items: center; gap: 10px; }
+    /* Seletor de tema claro/escuro */
+    .theme-btn { width: 40px; height: 40px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink-2); cursor: pointer; font-size: 18px; transition: background .2s, color .2s, border-color .2s; }
+    .theme-btn:hover { background: var(--tile); color: var(--ink); border-color: var(--muted); }
+    .theme-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .theme-btn .ic-sun { display: none; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme-btn .ic-sun { display: grid; } :root:not([data-theme="light"]) .theme-btn .ic-moon { display: none; } }
+    :root[data-theme="dark"] .theme-btn .ic-sun { display: grid; } :root[data-theme="dark"] .theme-btn .ic-moon { display: none; }
+    .pp-right { display: flex; align-items: center; gap: 10px; }
     .icon-btn { width: 44px; height: 44px; display: none; place-items: center; border: 0; background: none; cursor: pointer; font-size: 20px; color: var(--ink); }
 
     .mmenu { position: fixed; inset: 0; z-index: var(--z-menu); background: var(--page); padding: 0 32px 32px; display: flex; flex-direction: column; visibility: hidden; opacity: 0; transition: opacity .3s var(--ease), visibility 0s .3s; }
@@ -432,7 +466,7 @@
     .foot .legal button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
 
     /* Política de privacidade */
-    .pp-cta { margin-left: auto; }
+    .pp-right { margin-left: auto; }
     .pp { padding: 64px 0 96px; }
     .pp h1 { margin: 0 0 8px; }
     .pp .pp-meta { color: var(--muted); font-size: 14px; margin: 0 0 32px; }
@@ -449,6 +483,7 @@
     .nw { white-space: nowrap; }
     .dx-nav .wrap { gap: 20px; }
     .dx-nav nav { margin-left: auto; margin-right: 12px; }
+    .dx-nav-right { display: flex; align-items: center; gap: 10px; flex: none; }
     .dx-brand { display: inline-flex; align-items: baseline; gap: 8px; white-space: nowrap; }
     .dx-brand b { font-family: var(--font-display); font-weight: 400; font-size: 30px; letter-spacing: -.03em; line-height: 1; color: var(--ink); }
     .dx-brand b span { color: var(--accent); }
@@ -558,7 +593,7 @@
       .dx-split, .dx-split.rev { grid-template-columns: minmax(0, 1fr); gap: 48px; }
       .dx-split.rev > :first-child { order: 0; }
     }
-    @media (max-width: 960px) { .dx-nav nav { display: none; } .dx-nav .pill { margin-left: auto; } }
+    @media (max-width: 960px) { .dx-nav nav { display: none; } .dx-nav-right { margin-left: auto; } }
     @media (max-width: 833px) {
       .dx-hero { padding: 48px 0 80px; }
       .dx-steps { grid-template-columns: 1fr; }
@@ -580,11 +615,13 @@
       .dx-brand small { font-size: 11px; }
       .dx-brand { gap: 6px; }
       .dx-nav .pill { padding: 9px 12px; font-size: 13px; }
+      .dx-cta-more { display: none; }
       .dx-close { padding: 40px 16px; }
       .dx-close .form { padding: 20px 16px; }
       .pfactors { grid-template-columns: 1fr; gap: 20px; }
     }
     @media (max-width: 374px) {
+      .pp-cta { display: none; }
       .dx-brand small { display: none; }
       .dx-nav .wrap { gap: 12px; }
     }
