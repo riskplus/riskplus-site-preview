@@ -372,7 +372,7 @@ export const DocePage = () => {
           <div className="wrap dx-split rev">
             <div data-reveal>
               <h2 className="h-lg">Abra a nota e veja tudo o que o XML traz.</h2>
-              <p className="lead">Produtos, impostos, transporte, pagamento e eventos aparecem em abas, como na consulta da SEFAZ. Quando precisar levar para fora, baixe o XML, o DANFE, um ZIP com várias notas ou uma planilha em Excel.</p>
+              <p className="lead">A nota aparece em abas, como na consulta da SEFAZ: dados gerais, emitente e destinatário, produtos com os impostos de cada item, totais, transporte, cobrança e protocolo. Os eventos da nota ficam na mesma tela. Quando precisar levar para fora, baixe o XML, o DANFE, um ZIP com várias notas ou uma planilha em Excel.</p>
               <h3 className="dx-h3">Todos os CNPJs do grupo num só acesso.</h3>
               <p className="lead">Você decide quem vê cada empresa e o que cada pessoa pode fazer, com perfis prontos ou sob medida.</p>
               <p className="lead">Quem administra usuários entra com verificação em duas etapas. As ações ficam registradas na auditoria.</p>
