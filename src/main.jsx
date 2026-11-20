@@ -475,6 +475,66 @@ const FAQ = () => {
   );
 };
 
+// ── Analytics (GA4 só com consentimento) ─────────────────────────────────
+// ID da propriedade GA4 (G-XXXXXXXXXX). Vazio: nada é carregado e o aviso de cookies não aparece.
+const GA_ID = "";
+const CONSENT_KEY = "riskplus-cookies"; // "aceito" | "recusado"
+const readConsent = () => { try { return localStorage.getItem(CONSENT_KEY); } catch { return null; } };
+const saveConsent = (v) => { try { localStorage.setItem(CONSENT_KEY, v); } catch { /* navegador sem storage */ } };
+let gaLoaded = false;
+// O script do Google só é baixado depois do "Aceitar".
+const loadGA = () => {
+  if (!GA_ID || gaLoaded) return;
+  gaLoaded = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag() { window.dataLayer.push(arguments); };
+  window.gtag("js", new Date());
+  window.gtag("config", GA_ID);
+  const s = document.createElement("script");
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  document.head.appendChild(s);
+};
+const track = (name, params) => { if (gaLoaded) window.gtag("event", name, params); };
+// Ao recusar depois de ter aceitado: apaga os cookies _ga e recarrega sem o GA.
+const clearGaCookies = () => {
+  const host = location.hostname;
+  document.cookie.split(";").map((c) => c.split("=")[0].trim()).filter((n) => n.startsWith("_ga")).forEach((n) => {
+    [host, "." + host.replace(/^www\./, "")].forEach((d) => { document.cookie = `${n}=; Max-Age=0; path=/; domain=${d}`; });
+    document.cookie = `${n}=; Max-Age=0; path=/`;
+  });
+};
+const openCookies = () => window.dispatchEvent(new Event("riskplus:cookies"));
+
+const CookieBanner = () => {
+  const [open, setOpen] = React.useState(false); // fechado no HTML do build; decide no navegador
+  React.useEffect(() => {
+    if (!GA_ID) return;
+    const c = readConsent();
+    if (c === "aceito") loadGA();
+    else if (!c) setOpen(true);
+    const reopen = () => setOpen(true);
+    window.addEventListener("riskplus:cookies", reopen);
+    return () => window.removeEventListener("riskplus:cookies", reopen);
+  }, []);
+  if (!open) return null;
+  const choose = (v) => {
+    saveConsent(v);
+    setOpen(false);
+    if (v === "aceito") loadGA();
+    else if (gaLoaded) { clearGaCookies(); location.reload(); }
+  };
+  return (
+    <div className="cookies" role="region" aria-label="Aviso de cookies">
+      <p>Usamos cookies do Google Analytics para entender como as pessoas usam o site. Eles só são ativados se você aceitar. Saiba mais na <a href="/privacidade">Política de Privacidade</a>.</p>
+      <div className="cookies-btns">
+        <button type="button" className="pill pill-line pill-sm" onClick={() => choose("recusado")}>Recusar</button>
+        <button type="button" className="pill pill-fill pill-sm" onClick={() => choose("aceito")}>Aceitar</button>
+      </div>
+    </div>
+  );
+};
+
 // ── Access form ───────────────────────────────────────────────────────────
 // URL do Google Apps Script que recebe o lead (docs/envio-do-lead.md).
 // Vazia, o formulário mostra o erro com o e-mail do comercial.
@@ -527,6 +587,7 @@ const Access = () => {
       const data = await res.json();
       if (!data.ok) throw new Error(data.erro || "falha");
       setSent(true);
+      track("generate_lead", { form: "acesso" });
     } catch {
       setStatus("error");
     }
@@ -605,7 +666,10 @@ const Footer = () => (
       </div>
       <div className="legal">
         <span>© 2026 RiskPlus Tecnologia Ltda. CNPJ 35.951.627/0001-02, São Paulo.</span>
-        <nav aria-label="Legal"><a href="/privacidade">Privacidade</a></nav>
+        <nav aria-label="Legal">
+          <a href="/privacidade">Privacidade</a>
+          {GA_ID && <button type="button" onClick={openCookies}>Cookies</button>}
+        </nav>
       </div>
     </div>
   </footer>
@@ -627,6 +691,7 @@ const App = () => {
         <Access />
       </main>
       <Footer />
+      <CookieBanner />
     </>
   );
 };
