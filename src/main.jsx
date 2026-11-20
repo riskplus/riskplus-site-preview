@@ -39,10 +39,10 @@ const STEP_MS = 520;
 const SOURCES = ["Receita Federal", "Quadro societário", "Comportamento de faturamento", "Comportamento de pagamentos", "Sinais alternativos", "Modelo RiskPlus"];
 
 const STATEMENTS = [
-  { us: <><b>Uma recomendação clara</b>, com os motivos ao lado.</>, them: "No bureau: score sem explicação." },
-  { us: <>Analisa empresas <b>fora do bureau</b> usando sinais alternativos.</>, them: "No bureau: empresa nova ou pequena costuma aparecer como “sem informação”." },
-  { us: <>Você cola o CNPJ e <b>tem a resposta em segundos.</b></>, them: "No bureau: relatório longo pra interpretar." },
-  { us: <><b>No painel ou via API</b>, do jeito que funcionar melhor pra você.</>, them: "No bureau: planilha ou integração antiga." },
+  { us: <><b>Uma recomendação clara</b>, com os motivos ao lado.</>, them: "Score sem explicação." },
+  { us: <>Analisa empresas <b>fora do bureau</b> usando sinais alternativos.</>, them: "Empresa nova ou pequena costuma aparecer como “sem informação”." },
+  { us: <>Você cola o CNPJ e <b>tem a resposta em segundos.</b></>, them: "Relatório longo pra interpretar." },
+  { us: <><b>No painel ou via API</b>, do jeito que funcionar melhor pra você.</>, them: "Planilha ou integração antiga." },
 ];
 
 const FAQS = [
@@ -289,41 +289,29 @@ const Marquee = () => (
   </div>
 );
 
-// ── Differentiators: each statement lights up as it crosses the middle ────
-const Differentiators = () => {
-  const listRef = React.useRef(null);
-  React.useEffect(() => {
-    const items = listRef.current.querySelectorAll(".lit");
-    if (reducedMotion()) { items.forEach((el) => (el.dataset.on = "")); return; }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) e.target.dataset.on = "";
-        else if (e.boundingClientRect.top > window.innerHeight / 2) delete e.target.dataset.on;
-      });
-    }, { rootMargin: "-38% 0px -38% 0px" });
-    items.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  return (
-    <section className="sec" id="diferenciais">
-      <div className="wrap center lit-head">
-        <h2 className="h-lg" data-reveal>O bureau só enxerga quem já tem histórico de crédito.</h2>
-        <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus olha também pra dados que o bureau não usa. Por isso consegue analisar MEI e empresa recém-aberta.</p>
-      </div>
-      <div className="wrap">
-        <div className="lit-list" ref={listRef}>
-          {STATEMENTS.map((s, i) => (
-            <div className="lit" key={i}>
-              <h3>{s.us}</h3>
-              <p>{s.them}</p>
-            </div>
-          ))}
+// ── Differentiators: tabela comparativa RiskPlus x bureau ────────────────
+const Differentiators = () => (
+  <section className="sec" id="diferenciais">
+    <div className="wrap center lit-head">
+      <h2 className="h-lg" data-reveal>O bureau só enxerga quem já tem histórico de crédito.</h2>
+      <p className="lead sub-c" data-reveal style={{ "--i": 1 }}>A RiskPlus olha também pra dados que o bureau não usa. Por isso consegue analisar MEI e empresa recém-aberta.</p>
+    </div>
+    <div className="wrap">
+      <div className="cmp" role="table" aria-label="Comparação entre a RiskPlus e o bureau">
+        <div className="cmp-row cmp-head" role="row">
+          <span role="columnheader">Com a RiskPlus</span>
+          <span role="columnheader">No bureau</span>
         </div>
+        {STATEMENTS.map((s, i) => (
+          <div className="cmp-row" role="row" key={i} data-reveal style={{ "--i": i }}>
+            <h3 role="cell">{s.us}</h3>
+            <p role="cell"><span className="cmp-tag">No bureau</span>{s.them}</p>
+          </div>
+        ))}
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 // ── How it works: responsive grid (3 colunas no desktop, empilha no celular) ──
 const HowItWorks = () => {
