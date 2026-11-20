@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { ICONS } from "./icons.js";
 
 // ── Data ──────────────────────────────────────────────────────────────────
@@ -632,4 +631,5 @@ const App = () => {
   );
 };
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+// A montagem fica em src/client.jsx (navegador) e src/prerender.jsx (HTML pronto no build).
+export { App, FAQS, LINKEDIN_URL };

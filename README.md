@@ -16,6 +16,8 @@ Para editar com recompilação automática, use `npm run dev` num terminal e o s
 
 - `index.html`: marcação base e CSS. O build troca `<script src="app.js">` pelo bundle com hash.
 - `src/main.jsx`: componentes e textos do site.
+- `src/client.jsx`: entrada do navegador. Assume o HTML que já vem pronto do build.
+- `src/prerender.jsx`: roda só no build. Gera o HTML da página e os dados estruturados (JSON-LD de `Organization` e `FAQPage`), para buscadores e prévias de link lerem sem JavaScript.
 - `src/icons.js`: ícones Phosphor em SVG, gerados por `scripts/icons.mjs`.
 - `assets/`: logos e favicon.
 - `build.mjs`: script de build. A saída em `dist/` é o que vai para o servidor.
