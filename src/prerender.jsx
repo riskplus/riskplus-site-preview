@@ -3,10 +3,12 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { App, FAQS, LINKEDIN_URL } from "./main.jsx";
+import { PrivacyPage } from "./privacidade.jsx";
 
 const SITE = "https://riskplus.com.br/";
 
 export const renderApp = () => renderToString(<App />);
+export const renderPrivacy = () => renderToString(<PrivacyPage />);
 
 export const jsonLd = () => [
   {
