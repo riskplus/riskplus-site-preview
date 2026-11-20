@@ -209,6 +209,14 @@
     .gnav nav a { font-size: 14px; font-weight: 500; color: var(--ink-2); opacity: .85; transition: opacity .2s, color .2s; }
     .gnav nav a:hover, .gnav nav a.active { opacity: 1; color: var(--ink); }
     .gnav .right { display: flex; align-items: center; gap: 10px; }
+    /* Link cruzado RiskPlus <-> Doc-e, destacado no laranja da marca */
+    :root { --xlink-ink: var(--rp-orange-700); --xlink-bg: var(--rp-orange-50); --xlink-line: var(--rp-orange-100); }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --xlink-ink: var(--rp-orange-300); --xlink-bg: rgba(255,110,41,.14); --xlink-line: rgba(255,110,41,.32); } }
+    :root[data-theme="dark"] { --xlink-ink: var(--rp-orange-300); --xlink-bg: rgba(255,110,41,.14); --xlink-line: rgba(255,110,41,.32); }
+    .xlink { flex: none; display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--xlink-line); background: var(--xlink-bg); color: var(--xlink-ink); font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .2s, border-color .2s, color .2s; }
+    .xlink:hover { border-color: var(--rp-orange); color: var(--xlink-ink); }
+    .xlink:focus-visible { outline: 2px solid var(--rp-orange); outline-offset: 2px; }
+    .mmenu nav a.xlink-menu { color: var(--xlink-ink); }
     /* Seletor de tema claro/escuro */
     .theme-btn { width: 40px; height: 40px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink-2); cursor: pointer; font-size: 18px; transition: background .2s, color .2s, border-color .2s; }
     .theme-btn:hover { background: var(--tile); color: var(--ink); border-color: var(--muted); }
@@ -616,10 +624,12 @@
       .dx-brand { gap: 6px; }
       .dx-nav .pill { padding: 9px 12px; font-size: 13px; }
       .dx-cta-more { display: none; }
+      .dx-brand small { display: none; }
       .dx-close { padding: 40px 16px; }
       .dx-close .form { padding: 20px 16px; }
       .pfactors { grid-template-columns: 1fr; gap: 20px; }
     }
+    @media (max-width: 359px) { .xlink { display: none; } }
     @media (max-width: 374px) {
       .pp-cta { display: none; }
       .dx-brand small { display: none; }

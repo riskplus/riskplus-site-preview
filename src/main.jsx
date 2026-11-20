@@ -153,6 +153,7 @@ const Nav = () => {
             {NAV.map((l) => <a key={l.href} href={l.href} className={active === l.href ? "active" : ""}>{l.label}</a>)}
           </nav>
           <div className="right">
+            <a href="doc-e/" className="xlink" title="Doc-e: todos os documentos fiscais do seu CNPJ">Doc-e</a>
             <a href="#acesso" className="pill pill-fill pill-sm">Falar com o time</a>
             <ThemeToggle />
             <button type="button" className="icon-btn" aria-label="Abrir menu" aria-expanded={open} onClick={() => setOpen(true)}><Icon n="list" /></button>
@@ -161,7 +162,10 @@ const Nav = () => {
       </header>
       <div className={`mmenu ${open ? "open" : ""}`} role="dialog" aria-modal="true" aria-label="Menu" aria-hidden={!open}>
         <div className="top"><button type="button" className="icon-btn" aria-label="Fechar menu" onClick={() => setOpen(false)}><Icon n="x" /></button></div>
-        <nav>{NAV.map((l, i) => <a key={l.href} href={l.href} style={{ "--i": i }} onClick={() => setOpen(false)}>{l.label}</a>)}</nav>
+        <nav>
+          {NAV.map((l, i) => <a key={l.href} href={l.href} style={{ "--i": i }} onClick={() => setOpen(false)}>{l.label}</a>)}
+          <a href="doc-e/" className="xlink-menu" style={{ "--i": NAV.length }}>Doc-e</a>
+        </nav>
         <a href="#acesso" className="pill pill-fill" onClick={() => setOpen(false)}>Falar com o time</a>
       </div>
     </>
