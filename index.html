@@ -102,7 +102,7 @@
       --mono: var(--font-mono);
       --ease: var(--ease-out);
       --r-tile: var(--radius-xl); --r-card: var(--radius-lg); --r-input: var(--radius-md);
-      --z-nav: 40; --z-menu: 50;
+      --z-nav: 40; --z-cookies: 45; --z-menu: 50;
       --nav-h: 76px;
     }
     /* Dark scheme built from the DS neutrals (the guide defines light only) */
@@ -161,7 +161,7 @@
     .pill:active { transform: scale(.97); }
     .pill-fill { background: var(--accent); color: var(--on-accent); box-shadow: var(--shadow-brand); }
     .pill-fill:hover { background: var(--accent-hov); }
-    .pill-line { color: var(--accent); border-color: var(--accent); }
+    .pill-line { background: transparent; color: var(--accent); border-color: var(--accent); }
     .pill-line:hover { background: var(--accent); color: var(--on-accent); }
     .pill-sm { padding: 9px 16px; font-size: 14px; }
     .pill-warn { background: var(--warn); color: #fff; box-shadow: 0 8px 20px rgba(255,110,41,.30); }
@@ -429,6 +429,17 @@
     .foot a:hover { color: var(--ink); text-decoration: underline; }
     .foot .legal { padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
     .foot .legal nav { display: flex; gap: 18px; }
+    .foot .legal button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; }
+
+    /* Aviso de cookies */
+    .cookies { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: var(--z-cookies); max-width: 520px; display: grid; gap: 14px; padding: 18px 20px; background: var(--raised); color: var(--ink); border: 1px solid var(--hair); border-radius: var(--r-card); box-shadow: var(--shadow-lg); font-size: 14px; line-height: 1.5; }
+    .cookies p { margin: 0; }
+    .cookies a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+    .cookies-btns { display: flex; gap: 10px; justify-content: flex-end; }
+    .cookies-btns .pill { min-height: 44px; min-width: 104px; }
+    .cookies-btns .pill-line { color: var(--ink); border-color: var(--muted); }
+    .cookies-btns .pill-line:hover { background: var(--tile); color: var(--ink); }
+    @media (min-width: 834px) { .cookies { left: 24px; right: auto; bottom: 24px; } }
 
     /* Responsive ---------------------------------------------------- */
     @media (max-width: 1023px) {
@@ -478,7 +489,7 @@
       .gvis { margin-top: 24px; padding-top: 0; }
     }
     @media (max-width: 833px) {
-      .foot .cols a, .foot .legal a { display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
+      .foot .cols a, .foot .legal a, .foot .legal button { display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
       .foot .cols a { display: flex; }
       .more { min-height: 44px; }
       .faq-note a { display: inline-block; padding: 12px 0; margin: -12px 0; }

@@ -28,3 +28,5 @@ Cada push na `main` dispara dois workflows:
 
 - **Pages:** publica o preview em `riskplus.github.io/riskplus-site-preview`.
 - **Produção:** publica em `riskplus.com.br`. A configuração da VPS está em [docs/deploy-producao.md](docs/deploy-producao.md).
+
+Outros guias: [envio do lead](docs/envio-do-lead.md) e [analytics com aviso de cookies](docs/analytics.md).
