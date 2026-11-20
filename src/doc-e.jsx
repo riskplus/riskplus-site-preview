@@ -276,6 +276,7 @@ const Nav = () => (
         {NAV.map(([id, label]) => <a key={id} href={A(id)}>{label}</a>)}
       </nav>
       <div className="dx-nav-right">
+        <a href="./" className="xlink" title="RiskPlus: análise de crédito B2B pelo CNPJ">RiskPlus</a>
         <a href={A("contato")} className="pill pill-fill pill-sm" aria-label="Agendar demonstração">Agendar<span className="dx-cta-more"> demonstração</span></a>
         <ThemeToggle />
       </div>
