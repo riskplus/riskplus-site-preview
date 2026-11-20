@@ -325,39 +325,14 @@ const Differentiators = () => {
   );
 };
 
-// ── How it works: horizontal gallery ──────────────────────────────────────
+// ── How it works: responsive grid (3 colunas no desktop, empilha no celular) ──
 const HowItWorks = () => {
-  const galRef = React.useRef(null);
-  const [ends, setEnds] = React.useState({ start: true, end: false });
-
-  React.useEffect(() => {
-    const gal = galRef.current;
-    const cards = gal.querySelectorAll(".gcard");
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        const key = e.target === cards[0] ? "start" : "end";
-        setEnds((s) => ({ ...s, [key]: e.intersectionRatio > 0.95 }));
-      });
-    }, { root: gal, threshold: [0, 0.5, 0.95, 1] });
-    io.observe(cards[0]); io.observe(cards[cards.length - 1]);
-    return () => io.disconnect();
-  }, []);
-
-  const go = (dir) => {
-    const card = galRef.current.querySelector(".gcard");
-    galRef.current.scrollBy({ left: dir * (card.offsetWidth + 20), behavior: reducedMotion() ? "auto" : "smooth" });
-  };
-
   return (
     <section className="sec tile" id="como-funciona">
       <div className="wrap gal-head">
         <h2 className="h-lg" data-reveal>Do CNPJ à decisão em três passos.</h2>
-        <div className="gal-nav">
-          <button type="button" onClick={() => go(-1)} disabled={ends.start} aria-label="Passo anterior"><Icon n="caret-left" b /></button>
-          <button type="button" onClick={() => go(1)} disabled={ends.end} aria-label="Próximo passo"><Icon n="caret-right" b /></button>
-        </div>
       </div>
-      <div className="gal" ref={galRef}>
+      <div className="wrap gal">
         <article className="gcard">
           <span className="step">Primeiro</span>
           <h3>Cole o CNPJ.</h3>
