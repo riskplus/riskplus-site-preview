@@ -21,6 +21,7 @@
   <meta name="twitter:description" content="Saiba em segundos se vale vender a prazo. Cole o CNPJ do seu cliente B2B." />
   <meta name="twitter:image" content="https://riskplus.com.br/assets/og.png" />
   <meta name="color-scheme" content="light dark" />
+  <script>document.documentElement.classList.add("js")</script>
   <link rel="icon" href="assets/icon-blue.svg" />
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
 
@@ -151,7 +152,8 @@
     .center { text-align: center; }
 
     /* Reveal ------------------------------------------------------ */
-    [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); }
+    /* Só esconde quando o JS está ativo: sem JS (e para robôs), o texto aparece normal. */
+    .js [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); transition-delay: calc(var(--i, 0) * 90ms); }
     [data-reveal][data-shown] { opacity: 1; transform: none; }
 
     /* Buttons (pill) ------------------------------------------------ */
@@ -287,13 +289,14 @@
     /* Scroll-lit statements */
     .lit-head { margin-bottom: 80px; }
     .lit-list { display: grid; gap: 56px; max-width: 900px; margin: 0 auto; }
-    .lit { color: var(--line); transition: color .7s var(--ease); }
+    .js .lit { color: var(--line); transition: color .7s var(--ease); }
     .lit h3 { font-size: clamp(28px, 3.6vw, 48px); line-height: 1.1; letter-spacing: -.03em; }
     .lit h3 b { transition: color .7s var(--ease); }
-    .lit p { margin-top: 12px; font-size: 17px; color: transparent; transition: color .7s var(--ease); }
-    .lit[data-on] { color: var(--ink); }
-    .lit[data-on] h3 b { color: var(--accent); }
-    .lit[data-on] p { color: var(--muted); }
+    .lit p { margin-top: 12px; font-size: 17px; }
+    .js .lit p { color: transparent; transition: color .7s var(--ease); }
+    .js .lit[data-on] { color: var(--ink); }
+    .js .lit[data-on] h3 b { color: var(--accent); }
+    .js .lit[data-on] p { color: var(--muted); }
 
     /* Gallery */
     .gal-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
