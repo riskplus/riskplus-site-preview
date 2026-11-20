@@ -299,19 +299,15 @@
     .js .lit[data-on] p { color: var(--muted); }
 
     /* Gallery */
-    .gal-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 40px; }
-    .gal-nav { display: flex; gap: 10px; }
-    .gal-nav button { width: 44px; height: 44px; border-radius: 999px; border: 0; background: var(--line); color: var(--ink); cursor: pointer; display: grid; place-items: center; font-size: 16px; transition: opacity .2s, transform .2s var(--ease); }
-    .gal-nav button:active:not(:disabled) { transform: scale(.94); }
-    .gal-nav button:disabled { opacity: .35; cursor: default; }
-    .gal { --pad: max(24px, calc((100vw - 1120px) / 2 + 24px)); display: grid; grid-auto-flow: column; grid-auto-columns: min(420px, 84vw); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--pad); padding: 8px var(--pad) 24px; scrollbar-width: none; }
-    .gal::-webkit-scrollbar { display: none; }
-    .gcard { scroll-snap-align: start; border-radius: var(--r-tile); background: var(--raised); min-height: 520px; padding: 36px 32px; display: flex; flex-direction: column; transition: transform .5s var(--ease); }
+    .gal-head { margin-bottom: 40px; }
+    /* Os três passos cabem na tela: 3 colunas no desktop, empilhados no tablet/celular. Sem rolagem lateral nem setas. */
+    .gal { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; padding-block: 8px 24px; }
+    .gcard { min-width: 0; border-radius: var(--r-tile); background: var(--raised); min-height: 500px; padding: clamp(26px, 2.6vw, 36px) clamp(22px, 2.4vw, 32px); display: flex; flex-direction: column; transition: transform .5s var(--ease); }
     .gcard:hover { transform: scale(1.015); }
     .gcard.blue { background: var(--gradient-cover); color: #fff; box-shadow: var(--shadow-brand); }
     .gcard .step { font-size: 14px; font-weight: 600; color: var(--muted); }
     .gcard.blue .step { color: rgba(255,255,255,.75); }
-    .gcard h3 { font-size: 30px; line-height: 1.1; letter-spacing: -.03em; margin-top: 8px; }
+    .gcard h3 { font-size: clamp(24px, 2.5vw, 30px); line-height: 1.1; letter-spacing: -.03em; margin-top: 8px; }
     .gtext { font-size: 17px; color: var(--muted); margin-top: 12px; }
     .gcard.blue .gtext { color: rgba(255,255,255,.85); }
     .gvis { margin-top: auto; padding-top: 32px; }
@@ -602,6 +598,11 @@
       .hero .lead { margin-inline: auto; }
       .hero .actions { justify-content: center; }
     }
+    @media (max-width: 899px) {
+      .gal { grid-template-columns: 1fr; gap: 16px; }
+      .gcard { min-height: 0; }
+      .gvis { margin-top: 24px; padding-top: 0; }
+    }
     @media (max-width: 1068px) {
       .access { grid-template-columns: 1fr; padding: 56px 40px; }
     }
@@ -613,8 +614,7 @@
       .demo { padding: 22px 18px 26px; }
       .demo-stage { min-height: 380px; }
       .lit-list { gap: 40px; }
-      .gal-head { align-items: flex-start; flex-direction: column; }
-      .gcard { min-height: 400px; padding: 30px 26px; }
+      .gcard { padding: 30px 26px; }
       .pcard { padding: 28px 22px; }
       .pcard-top { flex-wrap: wrap; }
       .pcard .badge { margin-left: 0; }
@@ -636,9 +636,6 @@
       .demo-head .ok { display: none; }
       .demo-row { flex-direction: column; }
       .demo-row button { height: 44px; justify-content: center; }
-      .gal { align-items: start; }
-      .gcard { min-height: 0; }
-      .gvis { margin-top: 24px; padding-top: 0; }
     }
     @media (max-width: 833px) {
       .foot .cols a, .foot .legal a, .foot .legal button { display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
