@@ -3,7 +3,7 @@
 // Copy aprovada pelos sócios em 20/11/2026: não mude o texto sem passar pela especificação.
 // Telas: mocks em HTML com os rótulos do app real e dados fictícios (CNPJ e chave sempre mascarados).
 import React from "react";
-import { Icon, FAQ, LeadForm, CookieBanner, useReveal, GA_ID, openCookies, LINKEDIN_URL } from "./main.jsx";
+import { Icon, ThemeToggle, FAQ, LeadForm, CookieBanner, useReveal, GA_ID, openCookies, LINKEDIN_URL } from "./main.jsx";
 
 // A página tem <base href="../">: as âncoras levam o caminho da página para não voltarem à home.
 const A = (id) => `doc-e/#${id}`;
@@ -275,7 +275,10 @@ const Nav = () => (
       <nav aria-label="Seções">
         {NAV.map(([id, label]) => <a key={id} href={A(id)}>{label}</a>)}
       </nav>
-      <a href={A("contato")} className="pill pill-fill pill-sm">Agendar demonstração</a>
+      <div className="dx-nav-right">
+        <a href={A("contato")} className="pill pill-fill pill-sm" aria-label="Agendar demonstração">Agendar<span className="dx-cta-more"> demonstração</span></a>
+        <ThemeToggle />
+      </div>
     </div>
   </header>
 );
