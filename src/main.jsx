@@ -532,7 +532,7 @@ const CookieBanner = () => {
 // ── Access form ───────────────────────────────────────────────────────────
 // URL do Google Apps Script que recebe o lead (docs/envio-do-lead.md).
 // Vazia, o formulário mostra o erro com o e-mail do comercial.
-const LEAD_ENDPOINT = "";
+const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbxYSbz6rZm70fkbrBeWRlk0ygKK_UuRnvKARc0H4zxZFPApNNpDi9k13-gaag5A93N-/exec";
 
 // Formulário de contato. O site usa sem `produto`; a /doc-e/ manda produto "Doc-e", que vai no assunto e na planilha.
 const LeadForm = ({ produto, cta = "Falar com o time", doneText = "A gente fala com você pra marcar sua consulta grátis." }) => {
