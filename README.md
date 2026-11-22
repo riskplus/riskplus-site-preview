@@ -26,9 +26,8 @@ Para editar com recompilação automática, use `npm run dev` num terminal e o s
 
 ## Publicação
 
-Cada push na `main` dispara dois workflows:
+A `main` é protegida: toda mudança entra por PR. Cada merge na `main` dispara o workflow **Produção**, que publica em `riskplus.com.br`. A configuração da VPS está em [docs/deploy-producao.md](docs/deploy-producao.md).
 
-- **Pages:** publica o preview em `riskplus.github.io/riskplus-site-preview`.
-- **Produção:** publica em `riskplus.com.br`. A configuração da VPS está em [docs/deploy-producao.md](docs/deploy-producao.md).
+O site não sai mais pelo GitHub Pages. A cópia em `riskplus.github.io/riskplus-site-preview` foi desligada em 21/11/2026 para não duplicar o riskplus.com.br.
 
 Outros guias: [envio do lead](docs/envio-do-lead.md) e [analytics com aviso de cookies](docs/analytics.md).
